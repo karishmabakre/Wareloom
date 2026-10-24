@@ -1,0 +1,620 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Shipment Management</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #17324d;
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: #103f5c;
+            color: white;
+            padding: 24px 15px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            margin: 0 0 35px 8px;
+        }
+
+        .nav-label {
+            color: #b7d1e1;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin: 22px 10px 12px;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .nav-link i { margin-right: 10px; }
+        .nav-link:hover, .nav-link.active { background: #078b98; }
+
+        .main { flex: 1; min-width: 0; }
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid #dce5ed;
+            padding: 20px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar h1 { font-size: 22px; }
+        .user { font-size: 14px; color: #526b81; }
+
+        .content { padding: 28px; }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        h2 { font-size: 24px; margin-bottom: 7px; }
+        .muted { color: #71859a; font-size: 13px; }
+
+        .messages { margin-bottom: 18px; }
+
+        .message {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .message.success { background: #dff5e7; color: #247844; }
+        .message.error { background: #ffe2e2; color: #a52b2b; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: #078b98; color: white; }
+        .btn-primary:hover { background: #067581; }
+        .btn-light { background: #eaf0f5; color: #17324d; }
+        .btn-danger { background: #ffe2e2; color: #a52b2b; }
+        .btn-edit { background: #e1efff; color: #245c9b; }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card, .panel {
+            background: white;
+            border: 1px solid #dce5ed;
+            border-radius: 9px;
+        }
+
+        .summary-card { padding: 20px; }
+
+        .summary-label {
+            color: #71859a;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .summary-value { font-size: 27px; font-weight: bold; }
+
+        .panel { margin-bottom: 24px; overflow: hidden; }
+
+        .panel-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #dce5ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .panel-header h3 { font-size: 17px; }
+
+        .panel-body { padding: 20px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label { font-size: 13px; font-weight: 600; }
+
+        input, select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d3dfe8;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            color: #17324d;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #078b98;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filters input { min-width: 220px; }
+        .filters select { min-width: 150px; }
+
+        .table-wrap { width: 100%; overflow-x: auto; }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 950px;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e7edf2;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th { background: #f7f9fb; color: #526b81; }
+
+        tbody tr:hover { background: #f8fbfd; }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .preparing { background: #fff2d6; color: #946200; }
+        .shipped { background: #dcecff; color: #245c9b; }
+        .in-transit { background: #e9e0ff; color: #6842a0; }
+        .delivered { background: #dff5e7; color: #247844; }
+        .delayed { background: #ffe2e2; color: #b52d2d; }
+
+        .actions { display: flex; gap: 6px; align-items: center; }
+        .actions .btn { padding: 8px 10px; }
+        .inline-form { display: inline; }
+
+        .empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #71859a;
+        }
+
+        .table-footer {
+            padding: 15px 20px;
+            text-align: right;
+            color: #71859a;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1050px) {
+            .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sidebar { width: 190px; }
+        }
+
+        @media (max-width: 650px) {
+            .layout { display: block; }
+            .sidebar { width: 100%; }
+            .nav-link { display: inline-block; }
+            .content { padding: 15px; }
+            .summary-grid, .form-grid { grid-template-columns: 1fr; }
+            .topbar { padding: 16px; }
+            .filters, .filters input, .filters select { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand"><i class="bi bi-box-seam"></i> Wareloom</div>
+
+        <div class="nav-label">MAIN</div>
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+        <a href="{% url 'products' %}" class="nav-link">
+            <i class="bi bi-boxes"></i> Inventory
+        </a>
+        <a href="{% url 'orders' %}" class="nav-link">
+            <i class="bi bi-cart3"></i> Orders
+        </a>
+        <a href="{% url 'shipments' %}" class="nav-link active">
+            <i class="bi bi-truck"></i> Shipments
+        </a>
+
+        <div class="nav-label">ACCOUNT</div>
+        <a href="{% url 'home' %}" class="nav-link">
+            <i class="bi bi-house"></i> Landing Page
+        </a>
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <h1>Shipment Management</h1>
+            <div class="user">
+                <i class="bi bi-person-circle"></i>
+                {{ request.user.username }}
+            </div>
+        </header>
+
+        <section class="content">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Shipments Overview</h2>
+                    <p class="muted">Create shipments, manage tracking details, and monitor delivery status.</p>
+                </div>
+                <a href="{% url 'orders' %}" class="btn btn-primary">
+                    <i class="bi bi-cart3"></i> View Orders
+                </a>
+            </div>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- SUMMARY -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Shipments</div>
+                    <div class="summary-value">{{ total_shipments }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Preparing</div>
+                    <div class="summary-value">{{ preparing_shipments }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">In Transit</div>
+                    <div class="summary-value">{{ in_transit_shipments }}</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Delivered</div>
+                    <div class="summary-value">{{ delivered_shipments }}</div>
+                </div>
+            </div>
+
+            <!-- CREATE / EDIT FORM -->
+            <section class="panel" id="shipmentForm">
+                <div class="panel-header">
+                    <h3>
+                        {% if edit_shipment %}
+                            Edit Shipment: {{ edit_shipment.shipment_id }}
+                        {% else %}
+                            Create New Shipment
+                        {% endif %}
+                    </h3>
+                    {% if edit_shipment %}
+                        <a href="{% url 'shipments' %}" class="btn btn-light">
+                            Cancel Edit
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="panel-body">
+                    <form method="POST" action="{% url 'shipments' %}">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="action"
+                               value="{% if edit_shipment %}update{% else %}create{% endif %}">
+
+                        {% if edit_shipment %}
+                            <input type="hidden" name="shipment_pk"
+                                   value="{{ edit_shipment.pk }}">
+                        {% endif %}
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="shipment_id">Shipment ID *</label>
+                                <input type="text" id="shipment_id" name="shipment_id"
+                                       maxlength="20" required
+                                       placeholder="e.g. SHP-1001"
+                                       value="{{ edit_shipment.shipment_id|default:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="order">Order *</label>
+                                <select id="order" name="order" required>
+                                    <option value="">Select an order</option>
+                                    {% for order in available_orders %}
+                                        <option value="{{ order.pk }}"
+                                            {% if edit_shipment and edit_shipment.order_id == order.pk %}selected{% endif %}>
+                                            {{ order.order_number }} — {{ order.customer_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if not available_orders %}
+                                    <small class="muted">
+                                        No unassigned orders available. Create an order first.
+                                    </small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tracking_number">Tracking Number *</label>
+                                <input type="text" id="tracking_number"
+                                       name="tracking_number" maxlength="100" required
+                                       placeholder="Enter tracking number"
+                                       value="{{ edit_shipment.tracking_number|default:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="carrier">Carrier *</label>
+                                <input type="text" id="carrier" name="carrier"
+                                       maxlength="100" required
+                                       placeholder="e.g. Blue Dart"
+                                       value="{{ edit_shipment.carrier|default:'' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status">Shipment Status *</label>
+                                <select id="status" name="status" required>
+                                    {% for value, label in status_choices %}
+                                        <option value="{{ value }}"
+                                            {% if edit_shipment %}
+                                                {% if edit_shipment.status == value %}selected{% endif %}
+                                            {% elif value == 'Preparing' %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="shipment_date">Shipment Date & Time</label>
+                                <input type="datetime-local" id="shipment_date"
+                                       name="shipment_date"
+                                       value="{% if edit_shipment %}{{ edit_shipment.shipment_date|date:'Y-m-d\\TH:i' }}{% endif %}">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i>
+                                {% if edit_shipment %}Save Changes{% else %}Create Shipment{% endif %}
+                            </button>
+
+                            {% if edit_shipment %}
+                                <a href="{% url 'shipments' %}" class="btn btn-light">
+                                    Cancel
+                                </a>
+                            {% else %}
+                                <button type="reset" class="btn btn-light">
+                                    Clear Form
+                                </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- SEARCH AND FILTER -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>All Shipments</h3>
+
+                    <form method="GET" action="{% url 'shipments' %}" class="filters">
+                        <input type="search" name="q"
+                               placeholder="Search shipment, order, carrier..."
+                               value="{{ search_query }}">
+
+                        <select name="status">
+                            <option value="">All statuses</option>
+                            {% for value, label in status_choices %}
+                                <option value="{{ value }}"
+                                    {% if status_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+
+                        <a href="{% url 'shipments' %}" class="btn btn-light">
+                            Reset
+                        </a>
+                    </form>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shipment ID</th>
+                                <th>Order Number</th>
+                                <th>Customer</th>
+                                <th>Tracking Number</th>
+                                <th>Carrier</th>
+                                <th>Status</th>
+                                <th>Shipment Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for shipment in shipments %}
+                            <tr>
+                                <td><strong>{{ shipment.shipment_id }}</strong></td>
+                                <td>{{ shipment.order.order_number }}</td>
+                                <td>{{ shipment.order.customer_name }}</td>
+                                <td>{{ shipment.tracking_number }}</td>
+                                <td>{{ shipment.carrier }}</td>
+                                <td>
+                                    <span class="status
+                                        {% if shipment.status == 'Preparing' %}preparing
+                                        {% elif shipment.status == 'Shipped' %}shipped
+                                        {% elif shipment.status == 'In Transit' %}in-transit
+                                        {% elif shipment.status == 'Delivered' %}delivered
+                                        {% elif shipment.status == 'Delayed' %}delayed
+                                        {% endif %}">
+                                        {{ shipment.status }}
+                                    </span>
+                                </td>
+                                <td>{{ shipment.shipment_date|date:"d M Y, h:i A" }}</td>
+                                <td>
+                                    <div class="actions">
+                                        <a href="{% url 'shipments' %}?edit={{ shipment.pk }}"
+                                           class="btn btn-edit" title="Edit shipment">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </a>
+
+                                        <form method="POST" action="{% url 'shipments' %}"
+                                              class="inline-form"
+                                              onsubmit="return confirm('Delete this shipment? The order will not be deleted.');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="shipment_pk"
+                                                   value="{{ shipment.pk }}">
+                                            <button type="submit" class="btn btn-danger"
+                                                    title="Delete shipment">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="8" class="empty">
+                                    <i class="bi bi-truck" style="font-size:30px;"></i>
+                                    <p style="margin-top:10px;">No shipments found.</p>
+                                    <p style="margin-top:6px;">
+                                        Create a shipment using an order that has not been assigned to a shipment.
+                                    </p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    {{ shipments|length }} shipment(s) in this result
+                </div>
+            </section>
+            <!-- Shipments Pagination -->
+<div class="pagination-container">
+    <span class="pagination-info">
+        {% if page_obj.paginator.count %}
+            Showing {{ page_obj.start_index }}–{{ page_obj.end_index }}
+            of {{ page_obj.paginator.count }} shipments
+        {% else %}
+            No shipments found
+        {% endif %}
+    </span>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a class="page-link"
+               href="?page={{ page_obj.previous_page_number }}&q={{ search_query|urlencode }}&status={{ status_filter|urlencode }}">
+                Previous
+            </a>
+        {% else %}
+            <span class="page-link disabled">Previous</span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-link active">{{ num }}</span>
+            {% else %}
+                <a class="page-link"
+                   href="?page={{ num }}&q={{ search_query|urlencode }}&status={{ status_filter|urlencode }}">
+                    {{ num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a class="page-link"
+               href="?page={{ page_obj.next_page_number }}&q={{ search_query|urlencode }}&status={{ status_filter|urlencode }}">
+                Next
+            </a>
+        {% else %}
+            <span class="page-link disabled">Next</span>
+        {% endif %}
+    </div>
+</div>
+
+        </section>
+    </main>
+</div>
+</body>
+</html>

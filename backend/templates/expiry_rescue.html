@@ -1,0 +1,461 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Expiry Rescue</title>
+ <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <style>
+        /* ========================================
+   WARELOOM - EXPIRY RESCUE DASHBOARD
+   ======================================== */
+
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --primary-light: #ccfbf1;
+            --background: #f5f7fb;
+            --surface: #ffffff;
+            --text: #172b4d;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --warning: #b45309;
+            --warning-bg: #fffbeb;
+            --success: #15803d;
+            --shadow: 0 8px 28px rgba(15, 23, 42, 0.055);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 36px 24px;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+
+        .header {
+            position: relative;
+            overflow: hidden;
+            padding: 32px 36px;
+            margin-bottom: 26px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            margin: 18px 0 8px;
+            color: #12314a;
+            font-size: clamp(28px, 4vw, 38px);
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            margin: 10px 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 650;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .back:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Summary cards */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-bottom: 26px;
+        }
+
+        .stat {
+            position: relative;
+            padding: 25px 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.09);
+        }
+
+        .stat.danger {
+            border-left-color: var(--danger);
+        }
+
+        .stat>div:first-child {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .number {
+            margin-top: 10px;
+            color: var(--text);
+            font-size: 38px;
+            line-height: 1.2;
+            font-weight: 750;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat.danger .number {
+            color: var(--danger);
+        }
+
+        /* Content sections */
+
+        .card {
+            min-width: 0;
+            padding: 28px;
+            margin-bottom: 26px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            margin: 0 0 22px;
+            color: #12314a;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        /* Tables */
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--surface);
+        }
+
+        thead th {
+            padding: 16px 18px;
+            color: #475569;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 750;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.65px;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 17px 18px;
+            color: #334155;
+            border-bottom: 1px solid #edf1f5;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody td:first-child {
+            color: #172b4d;
+            font-weight: 650;
+        }
+
+        tbody td:nth-child(3) {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Expiry status */
+
+        .expired {
+            display: inline-block;
+            padding: 5px 10px;
+            color: var(--danger);
+            background: var(--danger-bg);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        .soon {
+            display: inline-block;
+            padding: 5px 10px;
+            color: var(--warning);
+            background: var(--warning-bg);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        /* Empty state */
+
+        .empty {
+            display: flex;
+            align-items: center;
+            min-height: 70px;
+            padding: 18px;
+            color: var(--success);
+            background: #f0fdf4;
+            border: 1px solid #dcfce7;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        /* Keyboard accessibility */
+
+        a:focus-visible {
+            outline: 3px solid #5eead4;
+            outline-offset: 4px;
+        }
+
+        /* Tablet */
+
+        @media (max-width: 768px) {
+            body {
+                padding: 22px 16px;
+            }
+
+            .header {
+                padding: 26px 22px;
+            }
+
+            .stats {
+                gap: 14px;
+            }
+
+            .stat {
+                padding: 21px;
+            }
+
+            .number {
+                font-size: 32px;
+            }
+
+            .card {
+                padding: 22px 18px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+            }
+
+            thead th,
+            tbody td {
+                padding: 14px;
+            }
+        }
+
+        /* Mobile */
+
+        @media (max-width: 520px) {
+            body {
+                padding: 14px 10px;
+            }
+
+            .header {
+                padding: 22px 18px;
+                border-radius: 14px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat {
+                padding: 20px;
+            }
+
+            .card {
+                padding: 20px 14px;
+                margin-bottom: 16px;
+                border-radius: 13px;
+            }
+
+            .card h2 {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .table-wrap {
+                border-radius: 9px;
+            }
+
+            table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <a class="back" href="{% url 'products' %}">
+                &larr; Back to Products
+            </a>
+
+            <h1>Expiry Rescue</h1>
+            <p>
+                Identify expired inventory and products approaching
+                their expiry dates.
+            </p>
+            <p>Today's date: {{ today|date:"d M Y" }}</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat danger">
+                <div>Products with expired stock</div>
+                <div class="number">{{ expired_count }}</div>
+            </div>
+
+            <div class="stat">
+                <div>Products expiring within 30 days</div>
+                <div class="number">{{ expiring_count }}</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Expired Products</h2>
+
+            {% if expired_products %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in expired_products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.sku|default:"—" }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.expiry_date|date:"d M Y" }}</td>
+                            <td class="expired">Expired</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty">No expired stock found.</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>Expiring Within 30 Days</h2>
+
+            {% if expiring_soon %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Expiry Date</th>
+                            <th>Days Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in expiring_soon %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.sku|default:"—" }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.expiry_date|date:"d M Y" }}</td>
+                            <td class="soon">
+                                <span>
+                                {{ product.expiry_date|timeuntil:today }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty">
+                No products are expiring within the next 30 days.
+            </p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+
+</html>

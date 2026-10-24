@@ -1,0 +1,936 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Dashboard</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fa;
+            color: #17324d;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            flex-shrink: 0;
+            min-height: 100vh;
+            background: #103f5c;
+            color: #fff;
+            padding: 24px 16px;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 38px 5px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .sidebar-brand i {
+            font-size: 27px;
+        }
+
+        .nav-label {
+            color: #b7d1e1;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin: 24px 9px 12px;
+        }
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 12px;
+            margin-bottom: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: background .2s ease;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: #078b98;
+            color: #fff;
+        }
+
+        /* Main layout and header */
+        .main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: #f3f6fa;
+        }
+
+        .topbar {
+            width: 100%;
+            min-height: 88px;
+            padding: 20px 35px;
+            background: #fff;
+            border-bottom: 1px solid #dce5ed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .topbar-title {
+            color: #17324d;
+            font-size: 27px;
+            line-height: 1.3;
+            font-weight: 800;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .username {
+            color: #526b81;
+            font-size: 13px;
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 22px;
+            background: #0f9483;
+            color: #fff;
+            border: 1px solid #0f9483;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background .2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #087667;
+        }
+
+        /* Dashboard content */
+        .content {
+            flex: 1;
+            width: 100%;
+            min-width: 0;
+            padding: 28px;
+        }
+
+        .welcome {
+            margin-bottom: 22px;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #17324d;
+        }
+
+        .welcome p {
+            color: #71859a;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Main metric cards */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: #fff;
+            border: 1px solid #dce5ed;
+            border-radius: 12px;
+            padding: 22px;
+            min-width: 0;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(23, 50, 77, .06);
+        }
+
+        .metric-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: #71859a;
+            line-height: 1.5;
+        }
+
+        .metric-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            background: #e6f5f5;
+            color: #078b98;
+            border-radius: 9px;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: 800;
+            color: #17324d;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-subtitle {
+            font-size: 12px;
+            color: #71859a;
+            margin-top: 8px;
+        }
+
+        /* Secondary metric cards */
+        .secondary-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .secondary-card {
+            background: #fff;
+            border: 1px solid #dce5ed;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 0;
+        }
+
+        .secondary-card h3 {
+            font-size: 13px;
+            font-weight: 500;
+            color: #526b81;
+            margin-bottom: 10px;
+        }
+
+        .secondary-card p {
+            font-size: 24px;
+            font-weight: 800;
+            color: #17324d;
+            overflow-wrap: anywhere;
+        }
+
+        /* Table panels */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #dce5ed;
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 0;
+            margin-bottom: 18px;
+        }
+
+        .tables-grid .panel {
+            margin-bottom: 0;
+        }
+
+        .panel-header {
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #dce5ed;
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+            color: #17324d;
+        }
+
+        .view-all {
+            color: #078b98;
+            font-size: 12px;
+            text-decoration: none;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 15px 16px;
+            border-bottom: 1px solid #e7edf2;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f7f9fb;
+            color: #526b81;
+            font-weight: 600;
+        }
+
+        td {
+            color: #17324d;
+        }
+
+        tbody tr:hover {
+            background: #f9fcfd;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty {
+            text-align: center;
+            color: #71859a;
+            padding: 28px;
+        }
+
+        /* Status badges */
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status-pending,
+        .status-preparing {
+            background: #fff2d6;
+            color: #946200;
+        }
+
+        .status-processing,
+        .status-shipped {
+            background: #dcecff;
+            color: #245c9b;
+        }
+
+        .status-in-transit {
+            background: #e9e0ff;
+            color: #6842a0;
+        }
+
+        .status-delivered,
+        .status-paid {
+            background: #dff5e7;
+            color: #247844;
+        }
+
+        .status-cancelled,
+        .status-delayed,
+        .status-failed {
+            background: #ffe2e2;
+            color: #b52d2d;
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            background: #fff;
+            border: 1px solid #dce5ed;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            padding: 18px;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 17px;
+            border: 1px solid #dce5ed;
+            border-radius: 9px;
+            color: #17324d;
+            text-decoration: none;
+            font-size: 13px;
+            transition: background .2s ease, border-color .2s ease;
+        }
+
+        .quick-link i {
+            color: #087f98;
+            font-size: 19px;
+        }
+
+        .quick-link:hover {
+            background: #edf8f9;
+            border-color: #078b98;
+        }
+
+        .footer {
+            color: #71859a;
+            font-size: 11px;
+            text-align: center;
+            padding: 22px 10px 8px;
+        }
+
+        /* Responsive tablet layout */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 235px;
+                min-width: 235px;
+            }
+
+            .content {
+                padding: 22px;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive mobile layout */
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                min-height: auto;
+                padding: 16px;
+            }
+
+            .sidebar-brand {
+                margin-bottom: 18px;
+            }
+
+            .nav-label {
+                margin-top: 14px;
+            }
+
+            .sidebar .nav-link {
+                display: inline-flex;
+                margin-right: 4px;
+                padding: 10px;
+            }
+
+            .topbar {
+                min-height: 72px;
+                padding: 14px 16px;
+            }
+
+            .topbar-title {
+                font-size: 21px;
+            }
+
+            .username {
+                display: none;
+            }
+
+            .logout-btn {
+                min-height: 40px;
+                padding: 0 13px;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .welcome h2 {
+                font-size: 22px;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .metric-card {
+                padding: 14px;
+            }
+
+            .metric-value {
+                font-size: 24px;
+            }
+
+            .secondary-metrics {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar-title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .secondary-metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .secondary-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="bi bi-box-seam"></i>
+                <span>Wareloom</span>
+            </div>
+
+            <div class="nav-label">MAIN</div>
+
+            <a href="{% url 'dashboard' %}" class="nav-link active">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{% url 'products' %}" class="nav-link">
+                <i class="bi bi-boxes"></i>
+                <span>Inventory</span>
+            </a>
+
+            <a href="{% url 'orders' %}" class="nav-link">
+                <i class="bi bi-cart3"></i>
+                <span>Orders</span>
+            </a>
+
+            <a href="{% url 'shipments' %}" class="nav-link">
+                <i class="bi bi-truck"></i>
+                <span>Shipments</span>
+            </a>
+
+            <div class="nav-label">MANAGEMENT</div>
+
+            <a href="{% url 'analytics' %}" class="nav-link">
+                <i class="bi bi-bar-chart"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="{% url 'expiry_rescue' %}" class="nav-link">
+                <i class="bi bi-calendar-event"></i>
+                <span>Expiry Rescue</span>
+            </a>
+
+
+            <a href="{% url 'stock_sense' %}" class="nav-link">
+                <i class="bi bi-graph-down-arrow"></i>
+                <span>StockSense</span>
+            </a>
+            <a href="{% url 'inventory_time_machine' %}" class="nav-link">
+                <i class="bi bi-clock-history"></i>
+                <span>Inventory Time Machine</span>
+            </a>
+
+            <a href="{% url 'reports_alerts' %}" class="nav-link">
+                <i class="bi bi-bell"></i> 
+                <span>Reports & Alerts</span>
+
+            </a>
+            <div class="nav-label">ACCOUNT</div>
+
+            <a href="{% url 'home' %}" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span>Landing Page</span>
+            </a>
+
+            <a href="{% url 'logout' %}" class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+
+            <!-- TOP HEADER -->
+            <header class="topbar">
+                <h1 class="topbar-title">Dashboard</h1>
+
+                <div class="user-info">
+                    <span class="username">
+                        Welcome, {{ username|default:request.user.username }}
+                    </span>
+
+                    <a href="{% url 'logout' %}" class="logout-btn">
+                        Logout <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <section class="content">
+
+                <!-- WELCOME -->
+                <div class="welcome">
+                    <h2>Welcome back, {{ username|default:request.user.username }}</h2>
+                    <p>Here's what's happening in your warehouse today.</p>
+                </div>
+
+
+                <!-- MAIN METRICS -->
+                <div class="metrics">
+
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <span class="metric-label">Total Products</span>
+                            <span class="metric-icon">
+                                <i class="bi bi-boxes"></i>
+                            </span>
+                        </div>
+                        <div class="metric-value">{{ total_products|default:0 }}</div>
+                        <div class="metric-subtitle">Products in inventory</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <span class="metric-label">Inventory Units</span>
+                            <span class="metric-icon">
+                                <i class="bi bi-layers"></i>
+                            </span>
+                        </div>
+                        <div class="metric-value">{{ inventory_units|default:0 }}</div>
+                        <div class="metric-subtitle">Total units in stock</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <span class="metric-label">Total Orders</span>
+                            <span class="metric-icon">
+                                <i class="bi bi-cart3"></i>
+                            </span>
+                        </div>
+                        <div class="metric-value">{{ total_orders|default:0 }}</div>
+                        <div class="metric-subtitle">All recorded orders</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-top">
+                            <span class="metric-label">Total Shipments</span>
+                            <span class="metric-icon">
+                                <i class="bi bi-truck"></i>
+                            </span>
+                        </div>
+                        <div class="metric-value">{{ total_shipments|default:0 }}</div>
+                        <div class="metric-subtitle">All recorded shipments</div>
+                    </div>
+
+                </div>
+
+                <!-- SECONDARY METRICS -->
+                <div class="secondary-metrics">
+
+                    <div class="secondary-card">
+                        <h3>Low Stock Products</h3>
+                        <p>{{ low_stock|default:0 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>Pending Orders</h3>
+                        <p>{{ pending_orders|default:0 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>In Transit Shipments</h3>
+                        <p>{{ in_transit_shipments|default:0 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>Inventory Value</h3>
+                        <p>₹{{ inventory_value|floatformat:2 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>Total Order Value</h3>
+                        <p>₹{{ total_order_value|floatformat:2 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>Pending Shipments</h3>
+                        <p>{{ pending_shipments|default:0 }}</p>
+                    </div>
+
+                    <div class="secondary-card">
+                        <h3>Delivered Shipments</h3>
+                        <p>{{ delivered_shipments|default:0 }}</p>
+                    </div>
+
+                </div>
+
+                <!-- RECENT ORDERS AND PRODUCTS -->
+                <div class="tables-grid">
+
+                    <!-- RECENT ORDERS -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Recent Orders</h3>
+                            <a href="{% url 'orders' %}" class="view-all">View all</a>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>{{ order.order_number }}</td>
+                                        <td>{{ order.customer_name }}</td>
+                                        <td>
+                                            <span class="status
+                                            {% if order.order_status == 'Pending' %}status-pending
+                                            {% elif order.order_status == 'Processing' or order.order_status == 'Shipped' %}status-processing
+                                            {% elif order.order_status == 'Delivered' %}status-delivered
+                                            {% elif order.order_status == 'Cancelled' %}status-cancelled
+                                            {% else %}status-processing{% endif %}">
+                                                {{ order.order_status }}
+                                            </span>
+                                        </td>
+                                        <td>₹{{ order.total_amount|floatformat:2 }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="empty">
+                                            No orders available.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- RECENT PRODUCTS -->
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Recent Products</h3>
+                            <a href="{% url 'products' %}" class="view-all">View all</a>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Qty</th>
+                                    </tr>
+                                </thead>
+
+                                <!-- Recent Orders -->
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>{{ order.order_number }}</td>
+                                        <td>{{ order.customer_name }}</td>
+                                        <td>
+                                            <span class="status
+                {% if order.order_status == 'Pending' %}status-pending
+                {% elif order.order_status == 'Processing' or order.order_status == 'Shipped' %}status-processing
+                {% elif order.order_status == 'Delivered' %}status-delivered
+                {% elif order.order_status == 'Cancelled' %}status-cancelled
+                {% else %}status-processing{% endif %}">
+                                                {{ order.order_status }}
+                                            </span>
+                                        </td>
+                                        <td>₹{{ order.total_amount|floatformat:2 }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="empty">No orders available.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- RECENT SHIPMENTS -->
+                <section class="panel">
+                    <div class="panel-header">
+                        <h3>Recent Shipments</h3>
+                        <a href="{% url 'shipments' %}" class="view-all">View all</a>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Shipment ID</th>
+                                    <th>Order Number</th>
+                                    <th>Carrier</th>
+                                    <th>Status</th>
+                                    <th>Shipment Date</th>
+                                </tr>
+                            </thead>
+
+                            <!-- Recent Shipments -->
+                            <tbody>
+                                {% for shipment in recent_shipments %}
+                                <tr>
+                                    <td>{{ shipment.shipment_id }}</td>
+                                    <td>{{ shipment.order.order_number }}</td>
+                                    <td>{{ shipment.carrier }}</td>
+                                    <td>
+                                        <span class="status
+                {% if shipment.status == 'Preparing' %}status-preparing
+                {% elif shipment.status == 'Shipped' %}status-shipped
+                {% elif shipment.status == 'In Transit' %}status-in-transit
+                {% elif shipment.status == 'Delivered' %}status-delivered
+                {% elif shipment.status == 'Delayed' %}status-delayed
+                {% endif %}">
+                                            {{ shipment.status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ shipment.shipment_date|date:"d M Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="empty">No shipments available.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- QUICK ACTIONS -->
+                <section class="quick-actions">
+                    <div class="panel-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+
+                    <div class="quick-grid">
+                        <a href="{% url 'products' %}" class="quick-link">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Add / Manage Products</span>
+                        </a>
+
+                        <a href="{% url 'orders' %}" class="quick-link">
+                            <i class="bi bi-cart-plus"></i>
+                            <span>Create / Manage Orders</span>
+                        </a>
+
+                        <a href="{% url 'shipments' %}" class="quick-link">
+                            <i class="bi bi-truck"></i>
+                            <span>Create / Manage Shipments</span>
+                        </a>
+
+                        <a href="{% url 'products' %}" class="quick-link">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Review Inventory</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- FOOTER -->
+                <footer class="footer">
+                    Wareloom Warehouse Management System
+                </footer>
+
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

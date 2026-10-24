@@ -1,0 +1,954 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Wareloom</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #14243a;
+            --navy-light: #203752;
+            --teal: #0f9483;
+            --teal-dark: #087667;
+            --mint: #a5e6d7;
+            --background: #f4f7fb;
+            --white: #ffffff;
+            --text: #17243b;
+            --muted: #75859a;
+            --border: #e2e9f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e9f0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1600px;
+            min-height: 88px;
+            margin: 0 auto;
+            padding: 16px 4%;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* Brand aligned left */
+        .brand {
+            justify-self: start;
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+            color: #17243b;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #a5e6d7;
+            display: grid;
+            place-items: center;
+            color: #14243a;
+            font-size: 27px;
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-family: "Manrope", sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* Navigation stays in the center */
+        .nav-links {
+            justify-self: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 34px;
+            white-space: nowrap;
+        }
+
+        .nav-links a {
+            color: #526178;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #0f9483;
+        }
+
+        /* Buttons aligned right */
+        .nav-actions {
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            min-height: 44px;
+            padding: 0 22px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline {
+            color: #14243a;
+            background: #ffffff;
+            border: 1px solid #dce6ed;
+        }
+
+        .btn-outline:hover {
+            background: #f0faf7;
+            border-color: #0f9483;
+        }
+
+        .btn-primary {
+            color: #ffffff;
+            background: #0f9483;
+            border: 1px solid #0f9483;
+        }
+
+        .btn-primary:hover {
+            background: #087667;
+            transform: translateY(-1px);
+        }
+
+        .menu-toggle {
+            display: none;
+            border: 1px solid #dce6ed;
+            background: white;
+            color: #14243a;
+            border-radius: 9px;
+            padding: 8px 12px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(115deg, #14243a 0%, #1b3b50 65%, #176d69 100%);
+            padding: 66px 24px 76px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, .09);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 340px;
+            height: 340px;
+            right: -90px;
+            top: -160px;
+        }
+
+        .hero::after {
+            width: 260px;
+            height: 260px;
+            left: -90px;
+            bottom: -160px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            color: #9af0dc;
+            background: rgba(165, 230, 215, .12);
+            border: 1px solid rgba(165, 230, 215, .22);
+            border-radius: 25px;
+            padding: 8px 15px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: "Manrope", sans-serif;
+            font-size: clamp(34px, 5vw, 53px);
+            letter-spacing: -1.7px;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #81e2d0;
+        }
+
+        .hero p {
+            max-width: 620px;
+            margin: auto;
+            color: #d0dce8;
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        /* MAIN LAYOUT */
+
+        .container {
+            width: min(1120px, calc(100% - 40px));
+            margin: -35px auto 70px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: .85fr 1.35fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .contact-info,
+        .contact-form {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            box-shadow: 0 12px 35px rgba(20, 36, 58, .06);
+        }
+
+        .contact-info {
+            background: var(--navy);
+            color: white;
+            padding: 31px;
+        }
+
+        .contact-info h2,
+        .contact-form h2 {
+            font-family: "Manrope", sans-serif;
+            font-size: 22px;
+            letter-spacing: -.5px;
+        }
+
+        .contact-info>p {
+            color: #b8c7d8;
+            line-height: 1.8;
+            font-size: 13px;
+            margin-top: 12px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            margin: 25px 0;
+        }
+
+        .info-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: rgba(165, 230, 215, .12);
+            color: #83e4d2;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .info-item h3 {
+            font-size: 13px;
+            margin: 2px 0 7px;
+        }
+
+        .info-item p,
+        .info-item a {
+            font-size: 12px;
+            color: #b9c9da;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .info-item a:hover {
+            color: #91ead9;
+        }
+
+        .info-divider {
+            height: 1px;
+            background: #34475e;
+            margin: 25px 0;
+        }
+
+        .availability {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #d2dfeb;
+            font-size: 12px;
+        }
+
+        .availability span {
+            width: 8px;
+            height: 8px;
+            background: #52d4a5;
+            border-radius: 50%;
+        }
+
+        /* FORM */
+
+        .contact-form {
+            padding: 34px;
+        }
+
+        .form-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            margin: 9px 0 26px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 19px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            display: block;
+            color: #3b4e64;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            background: #fbfcfe;
+            border: 1px solid #dfe6ee;
+            border-radius: 9px;
+            padding: 13px 14px;
+            color: var(--text);
+            outline: none;
+            transition: .2s;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(15, 148, 131, .09);
+            background: white;
+        }
+
+        .field textarea {
+            min-height: 135px;
+            resize: vertical;
+        }
+
+        .field input::placeholder,
+        .field textarea::placeholder {
+            color: #a1adba;
+        }
+
+        .form-footer {
+            margin-top: 22px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            min-height: 48px;
+        }
+
+        .form-note {
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            color: #166534;
+            background: #dcfce7;
+            font-size: 13px;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* FAQ / BOTTOM STRIP */
+
+        .bottom-strip {
+            margin-top: 26px;
+            padding: 24px 28px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bottom-strip h3 {
+            font-family: "Manrope", sans-serif;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .bottom-strip p {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            background: #101e31;
+            color: #b5c4d5;
+            padding: 38px 24px 24px;
+        }
+
+        .footer-inner {
+            max-width: 1120px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            color: white;
+            font: 800 21px "Manrope", sans-serif;
+        }
+
+        .footer-brand span {
+            color: #72dfcd;
+        }
+
+        .footer p {
+            font-size: 12px;
+            line-height: 1.8;
+            margin-top: 7px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #b5c4d5;
+            font-size: 12px;
+        }
+
+        .footer-links a:hover {
+            color: #72dfcd;
+        }
+
+        .copyright {
+            max-width: 1120px;
+            margin: 25px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #29394d;
+            color: #8294a9;
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .nav-links {
+                gap: 15px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                order: 2;
+            }
+
+            .contact-form {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .nav-container {
+                min-height: 76px;
+                padding: 13px 18px;
+                flex-wrap: wrap;
+            }
+
+            .brand-name {
+                font-size: 23px;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .menu-toggle {
+                display: block;
+                margin-left: auto;
+            }
+
+            .nav-links,
+            .nav-actions {
+                display: none;
+                width: 100%;
+            }
+
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0;
+            }
+
+            .nav-links.open a {
+                padding: 11px 0;
+            }
+
+            .nav-actions.open {
+                display: flex;
+                padding-bottom: 8px;
+            }
+
+            .nav-actions .btn {
+                flex: 1;
+            }
+
+            .hero {
+                padding: 52px 20px 65px;
+            }
+
+            .container {
+                width: calc(100% - 28px);
+                margin-top: -25px;
+            }
+
+            .contact-form,
+            .contact-info {
+                padding: 23px 19px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .bottom-strip {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 22px;
+            }
+
+            .footer-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        /* Tablet */
+        @media (max-width: 850px) {
+            .nav-container {
+                padding: 15px 24px;
+                gap: 16px;
+            }
+
+            .brand-name {
+                font-size: 23px;
+            }
+
+            .nav-links {
+                gap: 18px;
+            }
+
+            .btn {
+                padding: 0 15px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 650px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                min-height: 76px;
+                padding: 13px 18px;
+                gap: 12px;
+            }
+
+            .brand-icon {
+                width: 42px;
+                height: 42px;
+            }
+
+            .brand-name {
+                font-size: 23px;
+            }
+
+            .menu-toggle {
+                display: block;
+                justify-self: end;
+            }
+
+            .nav-links,
+            .nav-actions {
+                display: none;
+                grid-column: 1 / -1;
+                justify-self: stretch;
+                width: 100%;
+            }
+
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+            }
+
+            .nav-links.open a {
+                padding: 12px 0;
+            }
+
+            .nav-actions.open {
+                display: flex;
+                justify-content: flex-start;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+        <div class="nav-container">
+
+            <!-- Left: Brand -->
+            <a href="{% url 'home' %}" class="brand">
+                <span class="brand-icon">⬡</span>
+                <span class="brand-name">Wareloom</span>
+            </a>
+
+            <!-- Center: Navigation -->
+            <nav class="nav-links" id="navLinks">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'home' %}#features">Features</a>
+                <a href="{% url 'contact' %}" class="active">Contact</a>
+            </nav>
+
+            <!-- Right: Authentication -->
+            <div class="nav-actions" id="navActions">
+                {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-primary">
+                    Logout
+                </a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">
+                    Login
+                </a>
+                <a href="{% url 'signup' %}" class="btn btn-primary">
+                    Sign Up <span aria-hidden="true">→</span>
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Mobile menu -->
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle navigation"
+                aria-expanded="false">
+                ☰
+            </button>
+
+        </div>
+    </header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-label">We're here to help</div>
+        <h1>Let's start a <span>conversation.</span></h1>
+        <p>
+            Have questions about Wareloom or warehouse management?
+            Send us a message and tell us how we can help you streamline
+            your operations.
+        </p>
+    </section>
+
+    <!-- CONTACT CONTENT -->
+    <main class="container">
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="contact-grid">
+
+            <!-- CONTACT INFORMATION -->
+            <aside class="contact-info">
+                <h2>Contact information</h2>
+                <p>
+                    Use the form or contact us through the details
+                    provided below.
+                </p>
+
+                <div class="info-item">
+                    <div class="info-icon">✉</div>
+                    <div>
+                        <h3>Email us</h3>
+                        <p>
+                            <a href="mailto:support@wareloom.example">
+                                support@wareloom.example
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">☎</div>
+                    <div>
+                        <h3>Call us</h3>
+                        <p>
+                            Add your official support phone number here.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">⌖</div>
+                    <div>
+                        <h3>Our location</h3>
+                        <p>
+                            Add your business or organization address here.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-divider"></div>
+
+                <div class="availability">
+                    <span></span>
+                    Contact form available anytime
+                </div>
+            </aside>
+
+            <!-- CONTACT FORM -->
+            <section class="contact-form">
+                <h2>Send us a message</h2>
+                <p class="form-description">
+                    Fill in the details below. Our team can review your
+                    message and respond using your contact information.
+                </p>
+
+                <form method="POST" action="{% url 'contact' %}">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="name">Full name *</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name"
+                                autocomplete="name" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="email">Email address *</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com"
+                                autocomplete="email" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="phone">Phone number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"
+                                autocomplete="tel">
+                        </div>
+
+                        <div class="field">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Choose a subject</option>
+                                <option value="General enquiry">General enquiry</option>
+                                <option value="Technical support">Technical support</option>
+                                <option value="Product information">Product information</option>
+                                <option value="Order management">Order management</option>
+                                <option value="Shipment tracking">Shipment tracking</option>
+                                <option value="Feedback">Feedback</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="field full">
+                            <label for="message">Your message *</label>
+                            <textarea id="message" name="message" placeholder="Tell us how we can help..."
+                                minlength="10" maxlength="3000" required></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary submit-btn">
+                            Send Message <span aria-hidden="true">→</span>
+                        </button>
+
+                        <p class="form-note">
+                            By submitting this form, you agree that Wareloom
+                            may use your contact details to respond to your enquiry.
+                        </p>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+
+        <section class="bottom-strip">
+            <div>
+                <h3>Looking for your warehouse dashboard?</h3>
+                <p>
+                    Sign in to manage products, orders, shipments, and inventory.
+                </p>
+            </div>
+
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">
+                Open Dashboard →
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">
+                Login to Wareloom →
+            </a>
+            {% endif %}
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">Ware<span>loom</span></div>
+                <p>Smarter inventory. Streamlined operations.</p>
+            </div>
+
+            <nav class="footer-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'signup' %}">Sign Up</a>
+                <a href="{% url 'contact' %}">Contact Us</a>
+            </nav>
+        </div>
+
+        <div class="copyright">
+            © {% now "Y" %} Wareloom. Smart Warehouse Management System.
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+        const navActions = document.getElementById("navActions");
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = navLinks.classList.toggle("open");
+
+            navActions.classList.toggle("open", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.textContent = isOpen ? "✕" : "☰";
+        });
+    </script>
+
+</body>
+
+</html>

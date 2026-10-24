@@ -1,0 +1,856 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Reports & Alerts</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <style>
+        :root {
+            --navy: #103f5c;
+            --teal: #078b98;
+            --bg: #f3f6fa;
+            --border: #dce5ed;
+            --text: #17324d;
+            --muted: #71859a;
+            --red: #b52d2d;
+            --amber: #946200;
+            --green: #247844;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--navy);
+            color: white;
+            padding: 24px 14px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 35px 8px;
+        }
+
+        .nav-label {
+            color: #b7d1e1;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin: 22px 10px 12px;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+            transition: background .2s;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--teal);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 19px 28px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+        }
+
+        .avatar {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: white;
+        }
+
+        .content {
+            padding: 26px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 19px;
+            min-width: 0;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .stat-icon {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #e6f5f5;
+            color: var(--teal);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .red { color: var(--red); }
+        .amber { color: var(--amber); }
+        .green { color: var(--green); }
+        .teal { color: var(--teal); }
+
+        .section-title {
+            font-size: 18px;
+            margin: 25px 0 13px;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .report-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 21px;
+            min-width: 0;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 63, 92, .06);
+        }
+
+        .report-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            background: #e6f5f5;
+            color: var(--teal);
+            border-radius: 9px;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .report-card h3 {
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .report-card p {
+            margin-bottom: 17px;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            background: var(--teal);
+            color: white;
+            text-decoration: none;
+            padding: 11px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: background .2s;
+        }
+
+        .btn:hover {
+            background: var(--navy);
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .panel-header {
+            padding: 19px 21px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e7edf2;
+            font-size: 12px;
+        }
+
+        th {
+            background: #f7f9fb;
+            color: #526b81;
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfd;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-red {
+            background: #ffe2e2;
+            color: var(--red);
+        }
+
+        .badge-amber {
+            background: #fff2d6;
+            color: var(--amber);
+        }
+
+        .badge-green {
+            background: #dff5e7;
+            color: var(--green);
+        }
+
+        .empty {
+            padding: 24px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            padding: 15px 0 5px;
+        }
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 185px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 18px 12px;
+            }
+
+            .brand {
+                margin-bottom: 20px;
+            }
+
+            .nav-link {
+                display: inline-block;
+                padding: 10px;
+            }
+
+            .nav-label {
+                margin-top: 15px;
+            }
+
+            .stats,
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .topbar h1 {
+                font-size: 18px;
+            }
+
+            .content {
+                padding: 14px;
+            }
+
+            .page-heading h2 {
+                font-size: 22px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="bi bi-box-seam"></i> Wareloom
+        </div>
+
+        <div class="nav-label">MAIN</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+
+        <a href="{% url 'products' %}" class="nav-link">
+            <i class="bi bi-boxes"></i> Inventory
+        </a>
+
+        <a href="{% url 'orders' %}" class="nav-link">
+            <i class="bi bi-cart3"></i> Orders
+        </a>
+
+        <a href="{% url 'shipments' %}" class="nav-link">
+            <i class="bi bi-truck"></i> Shipments
+        </a>
+
+        <div class="nav-label">MANAGEMENT</div>
+
+        <a href="{% url 'analytics' %}" class="nav-link">
+            <i class="bi bi-bar-chart-line"></i> Analytics
+        </a>
+
+        <a href="{% url 'expiry_rescue' %}" class="nav-link">
+            <i class="bi bi-calendar2-check"></i> Expiry Rescue
+        </a>
+
+        <a href="{% url 'stock_sense' %}" class="nav-link">
+            <i class="bi bi-activity"></i> StockSense
+        </a>
+
+        <a href="{% url 'inventory_time_machine' %}" class="nav-link">
+            <i class="bi bi-clock-history"></i> Inventory Time Machine
+        </a>
+
+        <a href="{% url 'reports_alerts' %}" class="nav-link active">
+            <i class="bi bi-bell"></i> Reports & Alerts
+        </a>
+
+        <div class="nav-label">ACCOUNT</div>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            <i class="bi bi-house"></i> Landing Page
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="topbar">
+            <h1>Reports & Alerts</h1>
+
+            <div class="user-info">
+                <span class="avatar">
+                    <i class="bi bi-person"></i>
+                </span>
+                <span>{{ request.user.username }}</span>
+            </div>
+        </header>
+
+        <section class="content">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Operations Center</h2>
+                    <p class="muted">
+                        Operational alerts, inventory reports, order summaries
+                        and shipment monitoring.
+                    </p>
+                    <p class="muted">
+                        Report date: {{ today|date:"d M Y" }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- KPI CARDS -->
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Critical Alerts</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-exclamation-octagon"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value red">
+                        {{ critical_alert_count }}
+                    </div>
+                    <p class="muted">Out-of-stock products and delayed shipments</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Low Stock Alerts</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value amber">
+                        {{ low_stock_count }}
+                    </div>
+                    <p class="muted">Products at or below reorder level</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Overdue Orders</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-calendar-x"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value red">
+                        {{ overdue_orders_count }}
+                    </div>
+                    <p class="muted">Past expected delivery date and not completed</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Inventory Value</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-currency-rupee"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value teal">
+                        ₹{{ inventory_value|default:0|floatformat:2 }}
+                    </div>
+                    <p class="muted">Current quantity multiplied by unit price</p>
+                </div>
+
+            </div>
+
+            <!-- OPERATIONAL SUMMARY -->
+            <h3 class="section-title">Operational Summary</h3>
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Products</span>
+                        <span class="stat-icon"><i class="bi bi-box-seam"></i></span>
+                    </div>
+                    <div class="stat-value">{{ total_products }}</div>
+                    <p class="muted">Products registered in inventory</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Orders</span>
+                        <span class="stat-icon"><i class="bi bi-cart-check"></i></span>
+                    </div>
+                    <div class="stat-value">{{ total_orders }}</div>
+                    <p class="muted">Orders recorded in the system</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Pending Orders</span>
+                        <span class="stat-icon"><i class="bi bi-hourglass-split"></i></span>
+                    </div>
+                    <div class="stat-value amber">{{ pending_orders_count }}</div>
+                    <p class="muted">Orders awaiting processing</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Active Shipments</span>
+                        <span class="stat-icon"><i class="bi bi-truck"></i></span>
+                    </div>
+                    <div class="stat-value teal">{{ active_shipments_count }}</div>
+                    <p class="muted">Preparing, shipped or in transit</p>
+                </div>
+
+            </div>
+
+            <!-- REPORT DOWNLOADS -->
+            <h3 class="section-title">Download Reports</h3>
+            <p class="muted" style="margin-bottom: 15px;">
+                Export current database records as CSV files compatible with Excel.
+            </p>
+
+            <div class="reports-grid">
+
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <h3>Inventory Report</h3>
+                    <p class="muted">
+                        Product names, SKU, supplier, warehouse location,
+                        quantities, reorder levels and stock status.
+                    </p>
+                    <a class="btn" href="{% url 'export_report_csv' 'inventory' %}">
+                        <i class="bi bi-download"></i> Download CSV
+                    </a>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="bi bi-cart-check"></i>
+                    </div>
+                    <h3>Order Report</h3>
+                    <p class="muted">
+                        Order numbers, customer names, products, order values,
+                        payment status and expected delivery dates.
+                    </p>
+                    <a class="btn" href="{% url 'export_report_csv' 'orders' %}">
+                        <i class="bi bi-download"></i> Download CSV
+                    </a>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <h3>Shipment Report</h3>
+                    <p class="muted">
+                        Shipment IDs, carriers, tracking numbers, dates
+                        and current shipment status.
+                    </p>
+                    <a class="btn" href="{% url 'export_report_csv' 'shipments' %}">
+                        <i class="bi bi-download"></i> Download CSV
+                    </a>
+                </div>
+
+                <div class="report-card">
+                    <div class="report-icon">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+                    <h3>Inventory Valuation Report</h3>
+                    <p class="muted">
+                        Product-level inventory values and the total
+                        value of current warehouse stock.
+                    </p>
+                    <a class="btn" href="{% url 'export_report_csv' 'valuation' %}">
+                        <i class="bi bi-download"></i> Download CSV
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- OUT OF STOCK -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Out-of-Stock Alerts</h3>
+                    <p class="muted">
+                        Products with zero or negative available quantity.
+                    </p>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Supplier</th>
+                                <th>Location</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in out_of_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.sku|default:"—" }}</td>
+                                <td>{{ product.supplier }}</td>
+                                <td>{{ product.location }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>
+                                    <span class="badge badge-red">Out of Stock</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    No out-of-stock products.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- LOW STOCK -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Low-Stock Alerts</h3>
+                    <p class="muted">
+                        Products above zero stock but at or below their reorder level.
+                    </p>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Supplier</th>
+                                <th>Quantity</th>
+                                <th>Reorder Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.sku|default:"—" }}</td>
+                                <td>{{ product.supplier }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>{{ product.reorder_level }}</td>
+                                <td>
+                                    <span class="badge badge-amber">Reorder Required</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    No low-stock products.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- OVERDUE ORDERS -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Overdue Orders</h3>
+                    <p class="muted">
+                        Orders past their expected delivery date that are not
+                        delivered or cancelled.
+                    </p>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order Number</th>
+                                <th>Customer</th>
+                                <th>Expected Delivery</th>
+                                <th>Order Status</th>
+                                <th>Amount</th>
+                                <th>Alert</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in overdue_orders %}
+                            <tr>
+                                <td>{{ order.order_number }}</td>
+                                <td>{{ order.customer_name }}</td>
+                                <td>{{ order.expected_delivery_date|date:"d M Y" }}</td>
+                                <td>{{ order.order_status }}</td>
+                                <td>₹{{ order.total_amount|floatformat:2 }}</td>
+                                <td>
+                                    <span class="badge badge-red">Overdue</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    No overdue orders.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- DELAYED SHIPMENTS -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Delayed Shipments</h3>
+                    <p class="muted">
+                        Shipments marked as delayed in the system.
+                    </p>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shipment ID</th>
+                                <th>Order Number</th>
+                                <th>Customer</th>
+                                <th>Carrier</th>
+                                <th>Shipment Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shipment in delayed_shipments %}
+                            <tr>
+                                <td>{{ shipment.shipment_id }}</td>
+                                <td>{{ shipment.order.order_number }}</td>
+                                <td>{{ shipment.order.customer_name }}</td>
+                                <td>{{ shipment.carrier }}</td>
+                                <td>{{ shipment.shipment_date|date:"d M Y" }}</td>
+                                <td>
+                                    <span class="badge badge-red">Delayed</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    No delayed shipments.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="footer">
+                Wareloom Smart Warehouse Management System
+            </div>
+
+        </section>
+    </main>
+</div>
+</body>
+</html>

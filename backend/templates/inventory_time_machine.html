@@ -1,0 +1,337 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Inventory Time Machine</title>
+ <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <style>
+        :root {
+            --navy: #103f5c;
+            --teal: #078b98;
+            --bg: #f3f6fa;
+            --text: #17324d;
+            --muted: #71859a;
+            --border: #dce5ed;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        .header, .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(23, 50, 77, 0.04);
+        }
+
+        .header {
+            padding: 28px;
+            margin-bottom: 22px;
+        }
+
+        .back {
+            color: var(--teal);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        h1 {
+            margin: 16px 0 8px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .panel {
+            padding: 24px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 21px;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        input, select, button {
+            min-height: 42px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        select {
+            min-width: 180px;
+            background: white;
+        }
+
+        button {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #066f79;
+        }
+
+        .reset {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 14px;
+            color: var(--navy);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .summary {
+            margin: 14px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        th {
+            background: #f7f9fc;
+            color: #526b81;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfd;
+        }
+
+        .type {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #e6f5f5;
+            color: #087667;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .positive {
+            color: #15803d;
+            font-weight: 700;
+        }
+
+        .negative {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .empty {
+            padding: 30px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 14px 10px;
+            }
+
+            .header, .panel {
+                padding: 20px 14px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            input, select, button, .reset {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <header class="header">
+        <a class="back" href="{% url 'dashboard' %}">
+            &larr; Back to Dashboard
+        </a>
+
+        <h1>Inventory Time Machine</h1>
+
+        <p class="subtitle">
+            Trace stock changes, review previous quantities,
+            and investigate why inventory changed.
+        </p>
+    </header>
+
+    <section class="panel">
+        <h2>Stock Movement History</h2>
+
+        <form method="get" class="filters">
+            <input
+                type="search"
+                name="q"
+                value="{{ search }}"
+                placeholder="Search product, SKU, or reason..."
+                aria-label="Search stock movements"
+            >
+
+            <select name="type" aria-label="Filter by movement type">
+                <option value="">All movement types</option>
+
+                {% for value, label in movement_types %}
+                <option
+                    value="{{ value }}"
+                    {% if selected_type == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Apply Filters</button>
+
+            <a class="reset" href="{% url 'inventory_time_machine' %}">
+                Reset
+            </a>
+        </form>
+
+        <p class="summary">
+            {{ total_movements }} matching movement(s).
+            Showing up to 200 records, newest first.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date and Time</th>
+                        <th>Product</th>
+                        <th>SKU</th>
+                        <th>Movement</th>
+                        <th>Previous Stock</th>
+                        <th>Change</th>
+                        <th>New Stock</th>
+                        <th>Reason</th>
+                        <th>Performed By</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for movement in movements %}
+                    <tr>
+                        <td>
+                            {{ movement.created_at|date:"d M Y, H:i" }}
+                        </td>
+
+                        <td>{{ movement.product.name }}</td>
+                        <td>{{ movement.product.sku|default:"—" }}</td>
+
+                        <td>
+                            <span class="type">
+                                {{ movement.get_movement_type_display }}
+                            </span>
+                        </td>
+
+                        <td>{{ movement.previous_quantity }}</td>
+
+                        <td>
+                            <span class="{% if movement.quantity_changed < 0 %}negative{% else %}positive{% endif %}">
+                                {% if movement.quantity_changed > 0 %}+{% endif %}{{ movement.quantity_changed }}
+                            </span>
+                        </td>
+
+                        <td>{{ movement.new_quantity }}</td>
+                        <td>{{ movement.reason }}</td>
+
+                        <td>
+                            {% if movement.performed_by %}
+                                {{ movement.performed_by.username }}
+                            {% else %}
+                                System / Unassigned
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="empty">
+                            No stock movement records found.
+                            Movements will appear after stock changes
+                            are connected to the history system.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

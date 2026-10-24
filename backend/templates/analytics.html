@@ -1,0 +1,853 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Advanced Analytics</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --navy: #103f5c;
+            --teal: #078b98;
+            --bg: #f3f6fa;
+            --border: #dce5ed;
+            --text: #17324d;
+            --muted: #71859a;
+            --green: #247844;
+            --amber: #946200;
+            --red: #b52d2d;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--navy);
+            color: white;
+            padding: 24px 14px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 35px 8px;
+        }
+
+        .nav-label {
+            color: #b7d1e1;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin: 22px 10px 12px;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+            transition: background 0.2s;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--teal);
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 19px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: white;
+            display: grid;
+            place-items: center;
+        }
+
+        .content {
+            padding: 26px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 19px;
+            min-width: 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(16, 63, 92, 0.07);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stat-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            background: #e6f5f5;
+            color: var(--teal);
+            font-size: 18px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-note {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 22px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 21px;
+            min-width: 0;
+        }
+
+        .panel h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 290px;
+            margin-top: 20px;
+        }
+
+        .table-panel {
+            padding: 0;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .panel-header {
+            padding: 19px 21px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e7edf2;
+            font-size: 12px;
+        }
+
+        th {
+            background: #f7f9fb;
+            color: #526b81;
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfd;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-good {
+            background: #dff5e7;
+            color: var(--green);
+        }
+
+        .badge-low {
+            background: #fff2d6;
+            color: var(--amber);
+        }
+
+        .badge-out {
+            background: #ffe2e2;
+            color: var(--red);
+        }
+
+        .empty {
+            padding: 25px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            padding: 15px 0 5px;
+        }
+
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 800px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 185px;
+            }
+
+            .content {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 18px 12px;
+            }
+
+            .brand {
+                margin-bottom: 20px;
+            }
+
+            .nav-link {
+                display: inline-block;
+                padding: 10px;
+            }
+
+            .nav-label {
+                margin-top: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .topbar h1 {
+                font-size: 18px;
+            }
+
+            .content {
+                padding: 14px;
+            }
+
+            .page-heading h2 {
+                font-size: 22px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="bi bi-box-seam"></i> Wareloom
+        </div>
+
+        <div class="nav-label">MAIN</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+
+        <a href="{% url 'products' %}" class="nav-link">
+            <i class="bi bi-boxes"></i> Inventory
+        </a>
+
+        <a href="{% url 'orders' %}" class="nav-link">
+            <i class="bi bi-cart3"></i> Orders
+        </a>
+
+        <a href="{% url 'shipments' %}" class="nav-link">
+            <i class="bi bi-truck"></i> Shipments
+        </a>
+
+        <div class="nav-label">MANAGEMENT</div>
+
+        <a href="{% url 'analytics' %}" class="nav-link active">
+            <i class="bi bi-bar-chart-line"></i> Analytics
+        </a>
+
+        <a href="{% url 'expiry_rescue' %}" class="nav-link">
+            <i class="bi bi-calendar2-check"></i> Expiry Rescue
+        </a>
+
+        <a href="{% url 'stock_sense' %}" class="nav-link">
+            <i class="bi bi-activity"></i> StockSense
+        </a>
+
+        <a href="{% url 'inventory_time_machine' %}" class="nav-link">
+            <i class="bi bi-clock-history"></i> Inventory Time Machine
+        </a>
+
+        <div class="nav-label">ACCOUNT</div>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            <i class="bi bi-house"></i> Landing Page
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <header class="topbar">
+            <h1>Analytics Overview</h1>
+
+            <div class="user-info">
+                <span class="avatar">
+                    <i class="bi bi-person"></i>
+                </span>
+                <span>{{ request.user.username }}</span>
+            </div>
+        </header>
+
+        <section class="content">
+            <div class="page-heading">
+                <div>
+                    <h2>Advanced Warehouse Analytics</h2>
+                    <p class="muted">
+                        Monitor stock health, inventory value, expiry risks,
+                        product categories, orders, and shipments.
+                    </p>
+                </div>
+            </div>
+
+            <!-- KPI CARDS -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Products</span>
+                        <span class="stat-icon"><i class="bi bi-box-seam"></i></span>
+                    </div>
+                    <div class="stat-value">{{ total_products|default:0 }}</div>
+                    <p class="stat-note">Products registered in inventory</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Inventory Units</span>
+                        <span class="stat-icon"><i class="bi bi-layers"></i></span>
+                    </div>
+                    <div class="stat-value">{{ total_units|default:0 }}</div>
+                    <p class="stat-note">Total units currently in stock</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Inventory Value</span>
+                        <span class="stat-icon"><i class="bi bi-currency-rupee"></i></span>
+                    </div>
+                    <div class="stat-value">₹{{ inventory_value|default:0|floatformat:2 }}</div>
+                    <p class="stat-note">Current quantity × product price</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Orders</span>
+                        <span class="stat-icon"><i class="bi bi-cart-check"></i></span>
+                    </div>
+                    <div class="stat-value">{{ total_orders|default:0 }}</div>
+                    <p class="stat-note">Orders recorded in the system</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Healthy Stock</span>
+                        <span class="stat-icon"><i class="bi bi-check-circle"></i></span>
+                    </div>
+                    <div class="stat-value">{{ healthy_stock|default:0 }}</div>
+                    <p class="stat-note">Quantity above reorder level</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Low Stock</span>
+                        <span class="stat-icon"><i class="bi bi-exclamation-triangle"></i></span>
+                    </div>
+                    <div class="stat-value">{{ low_stock|default:0 }}</div>
+                    <p class="stat-note">At or below reorder level, excluding zero</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Out of Stock</span>
+                        <span class="stat-icon"><i class="bi bi-box"></i></span>
+                    </div>
+                    <div class="stat-value">{{ out_of_stock|default:0 }}</div>
+                    <p class="stat-note">Products with zero quantity</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Expired Products</span>
+                        <span class="stat-icon"><i class="bi bi-calendar-x"></i></span>
+                    </div>
+                    <div class="stat-value">{{ expired_products|default:0 }}</div>
+                    <p class="stat-note">Products past their expiry date</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Expiring Within 30 Days</span>
+                        <span class="stat-icon"><i class="bi bi-clock-history"></i></span>
+                    </div>
+                    <div class="stat-value">{{ expiring_soon|default:0 }}</div>
+                    <p class="stat-note">Products approaching expiry</p>
+                </div>
+            </div>
+
+            <!-- CHARTS -->
+            <div class="charts-grid">
+                <div class="panel">
+                    <h3>Stock Health</h3>
+                    <p class="muted">Products grouped by stock status.</p>
+                    <div class="chart-container">
+                        <canvas id="stockChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Products by Category</h3>
+                    <p class="muted">Number of products in each category.</p>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Order Status</h3>
+                    <p class="muted">Current distribution of order statuses.</p>
+                    <div class="chart-container">
+                        <canvas id="orderChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Shipment Status</h3>
+                    <p class="muted">Current distribution of shipment statuses.</p>
+                    <div class="chart-container">
+                        <canvas id="shipmentChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Stock Movement — Last 7 Days</h3>
+                    <p class="muted">Number of recorded stock movements each day.</p>
+                    <div class="chart-container">
+                        <canvas id="movementChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Top 5 Products by Inventory Value</h3>
+                    <p class="muted">Current quantity multiplied by unit price.</p>
+                    <div class="chart-container">
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOW STOCK TABLE -->
+            <section class="panel table-panel">
+                <div class="panel-header">
+                    <h3>Low Stock Alerts</h3>
+                    <p class="muted">
+                        Products that have reached their reorder level
+                        or have no remaining stock.
+                    </p>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Reorder Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for product in low_stock_products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.sku|default:"—" }}</td>
+                                <td>{{ product.category|default:"—" }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>{{ product.reorder_level }}</td>
+                                <td>
+                                    {% if product.quantity <= 0 %}
+                                        <span class="badge badge-out">Out of stock</span>
+                                    {% else %}
+                                        <span class="badge badge-low">Low stock</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="empty">
+                                    No low-stock products at the moment.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="footer">
+                Wareloom Smart Warehouse Management System
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- DJANGO DATA TO JAVASCRIPT -->
+{{ stock_chart_labels|json_script:"stock-labels-data" }}
+{{ stock_chart_values|json_script:"stock-values-data" }}
+{{ category_labels|json_script:"category-labels-data" }}
+{{ category_values|json_script:"category-values-data" }}
+{{ order_labels|json_script:"order-labels-data" }}
+{{ order_values|json_script:"order-values-data" }}
+{{ shipment_labels|json_script:"shipment-labels-data" }}
+{{ shipment_values|json_script:"shipment-values-data" }}
+{{ movement_labels|json_script:"movement-labels-data" }}
+{{ movement_values|json_script:"movement-values-data" }}
+{{ top_product_labels|json_script:"top-product-labels-data" }}
+{{ top_product_values|json_script:"top-product-values-data" }}
+
+<script>
+    function readJSON(id) {
+        const element = document.getElementById(id);
+
+        if (!element) {
+            return [];
+        }
+
+        try {
+            return JSON.parse(element.textContent);
+        } catch (error) {
+            console.error("Unable to read chart data:", id, error);
+            return [];
+        }
+    }
+
+    const stockLabels = readJSON("stock-labels-data");
+    const stockValues = readJSON("stock-values-data");
+    const categoryLabels = readJSON("category-labels-data");
+    const categoryValues = readJSON("category-values-data");
+    const orderLabels = readJSON("order-labels-data");
+    const orderValues = readJSON("order-values-data");
+    const shipmentLabels = readJSON("shipment-labels-data");
+    const shipmentValues = readJSON("shipment-values-data");
+    const movementLabels = readJSON("movement-labels-data");
+    const movementValues = readJSON("movement-values-data");
+    const topProductLabels = readJSON("top-product-labels-data");
+    const topProductValues = readJSON("top-product-values-data");
+
+    function createChart(canvasId, config) {
+        const canvas = document.getElementById(canvasId);
+
+        if (canvas && typeof Chart !== "undefined") {
+            return new Chart(canvas, config);
+        }
+
+        return null;
+    }
+
+    if (typeof Chart !== "undefined") {
+        Chart.defaults.font.family = "Arial, Helvetica, sans-serif";
+        Chart.defaults.color = "#526b81";
+
+        const doughnutOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: "bottom" }
+            }
+        };
+
+        createChart("stockChart", {
+            type: "doughnut",
+            data: {
+                labels: stockLabels,
+                datasets: [{
+                    label: "Products",
+                    data: stockValues,
+                    backgroundColor: ["#078b98", "#f0b544", "#d9534f"],
+                    borderWidth: 2,
+                    borderColor: "#ffffff"
+                }]
+            },
+            options: doughnutOptions
+        });
+
+        createChart("categoryChart", {
+            type: "doughnut",
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: "Products",
+                    data: categoryValues,
+                    backgroundColor: [
+                        "#078b98", "#5684d8", "#f0b544", "#9b72cf",
+                        "#e17c5b", "#62a87c", "#7b8fa1", "#d9534f"
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#ffffff"
+                }]
+            },
+            options: doughnutOptions
+        });
+
+        createChart("orderChart", {
+            type: "doughnut",
+            data: {
+                labels: orderLabels,
+                datasets: [{
+                    label: "Orders",
+                    data: orderValues,
+                    backgroundColor: [
+                        "#078b98", "#f0b544", "#5684d8",
+                        "#6b7280", "#d9534f", "#9b72cf"
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#ffffff"
+                }]
+            },
+            options: doughnutOptions
+        });
+
+        createChart("shipmentChart", {
+            type: "bar",
+            data: {
+                labels: shipmentLabels,
+                datasets: [{
+                    label: "Shipments",
+                    data: shipmentValues,
+                    backgroundColor: "#078b98",
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        createChart("movementChart", {
+            type: "line",
+            data: {
+                labels: movementLabels,
+                datasets: [{
+                    label: "Recorded Movements",
+                    data: movementValues,
+                    borderColor: "#078b98",
+                    backgroundColor: "rgba(7, 139, 152, 0.12)",
+                    pointBackgroundColor: "#078b98",
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
+            }
+        });
+
+        createChart("topProductsChart", {
+            type: "bar",
+            data: {
+                labels: topProductLabels,
+                datasets: [{
+                    label: "Inventory Value (₹)",
+                    data: topProductValues,
+                    backgroundColor: "#078b98",
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    } else {
+        console.error("Chart.js did not load. Check your internet connection.");
+    }
+</script>
+</body>
+</html>

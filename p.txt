@@ -1,0 +1,50 @@
+
+Django 
+http://127.0.0.1:8000/login/ -
+username : karishma@gmail.com
+password : bakre12345
+
+http://127.0.0.1:8000/admin/
+admin@gmail.com
+admin12345
+
+
+Wareloom
+                       │
+                Product Management
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+       Web Interface          REST API
+       /products/             /api/products/
+             │                   │
+             ↓                   ↓
+       product_crud()       product_api()
+             │                   │
+             └─────────┬─────────┘
+                       ↓
+                 products Model
+
+
+
+product_crud()
+HTML Form
+   ↓
+Django View
+   ↓
+Database
+
+
+
+product_api()
+Postman / JavaScript / React / Mobile App
+              ↓
+          REST API
+              ↓
+          Database
+
+200 → Request successful
+201 → Resource created successfully
+204 → Request successful, no content returned
+400 → Invalid request/data
+404 → Resource not found

@@ -1,0 +1,1453 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wareloom | Product Management</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --navy: #103f5c;
+            --teal: #078b98;
+            --teal-light: #e6f5f5;
+            --bg: #f3f6fa;
+            --border: #dce5ed;
+            --text: #17324d;
+            --muted: #71859a;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--navy);
+            color: white;
+            padding: 24px 14px;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 35px 8px;
+        }
+
+        .nav-label {
+            color: #b7d1e1;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin: 22px 10px 12px;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 5px;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--teal);
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 19px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar h1 {
+            font-size: 21px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--teal);
+            color: white;
+            display: grid;
+            place-items: center;
+        }
+
+        .content {
+            padding: 26px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #066f7a;
+        }
+
+        .btn-light {
+            background: #eaf0f5;
+            color: var(--text);
+        }
+
+        .btn-edit {
+            background: #e1efff;
+            color: #245c9b;
+        }
+
+        .btn-delete {
+            background: #ffe7e7;
+            color: #b52d2d;
+        }
+
+        /* Summary cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 18px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .stat-icon {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 7px;
+            background: var(--teal-light);
+            color: var(--teal);
+            font-size: 17px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        /* Panels */
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 19px 21px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h3 {
+            font-size: 16px;
+        }
+
+        .panel-body {
+            padding: 22px;
+        }
+
+        /* Product form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        input,
+        select,
+        textarea {
+            display: block;
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cbd8e3;
+            border-radius: 6px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+            font-size: 13px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(7, 139, 152, 0.10);
+        }
+
+        textarea {
+            min-height: 82px;
+            resize: vertical;
+        }
+
+        .image-preview {
+            display: none;
+            margin-top: 10px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .image-help {
+            display: block;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 18px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #dff5e7;
+            color: #247844;
+        }
+
+        .message.error {
+            background: #ffe2e2;
+            color: #a52d2d;
+        }
+
+        /* Search and filters */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 220px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            color: var(--muted);
+        }
+
+        .search-box input {
+            padding-left: 35px;
+        }
+
+        .toolbar select {
+            width: auto;
+            min-width: 135px;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Inventory table */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e7edf2;
+            font-size: 12px;
+        }
+
+        th {
+            background: #f7f9fb;
+            color: #526b81;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfd;
+        }
+
+        .product-image {
+            width: 54px;
+            height: 54px;
+            object-fit: cover;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: #f7f9fb;
+        }
+
+        .image-placeholder {
+            display: inline-grid;
+            place-items: center;
+            color: var(--muted);
+            font-size: 22px;
+        }
+
+        .product-name {
+            font-weight: 700;
+        }
+
+        .sku {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .stock-badge {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .stock-good {
+            background: #dff5e7;
+            color: #247844;
+        }
+
+        .stock-low {
+            background: #fff2d6;
+            color: #946200;
+        }
+
+        .stock-out {
+            background: #ffe2e2;
+            color: #b52d2d;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .row-actions .btn {
+            padding: 7px 9px;
+            font-size: 11px;
+        }
+
+        .delete-form {
+            display: inline;
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 40px 20px;
+        }
+
+        .empty i {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            padding: 18px 20px;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .pagination-info {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            min-width: 36px;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            background: white;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .page-link:hover,
+        .page-link.active {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
+        .page-link.disabled {
+            color: #aab5bf;
+            background: #f3f6fa;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 18px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .sidebar {
+                width: 190px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .nav-link {
+                display: inline-block;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .stats,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .topbar {
+                padding: 15px;
+            }
+
+            .toolbar,
+            .search-box,
+            .toolbar select {
+                width: 100%;
+            }
+
+            .pagination-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="bi bi-box-seam"></i> Wareloom
+        </div>
+
+        <div class="nav-label">MAIN</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+
+        <a href="{% url 'products' %}" class="nav-link active">
+            <i class="bi bi-boxes"></i> Inventory
+        </a>
+
+        <a href="{% url 'orders' %}" class="nav-link">
+            <i class="bi bi-cart3"></i> Orders
+        </a>
+
+        <a href="{% url 'shipments' %}" class="nav-link">
+            <i class="bi bi-truck"></i> Shipments
+        </a>
+
+        <div class="nav-label">MANAGEMENT</div>
+        <a href="{% url 'analytics' %}" class="nav-link">
+            <i class="bi bi-bar-chart-line"></i> Analytics
+        </a>
+
+        <div class="nav-label">ACCOUNT</div>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            <i class="bi bi-house"></i> Landing Page
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <header class="topbar">
+            <h1>Product Management</h1>
+
+            <div class="user-info">
+                <span class="avatar">
+                    <i class="bi bi-person"></i>
+                </span>
+                <span>{{ request.user.username }}</span>
+            </div>
+        </header>
+
+        <section class="content">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Inventory Management</h2>
+                    <p class="muted">
+                        Manage products, stock levels, suppliers and expiry dates.
+                    </p>
+                </div>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        id="addProductButton">
+                    <i class="bi bi-plus-lg"></i> Add Product
+                </button>
+            </div>
+
+            <!-- DJANGO MESSAGES -->
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- SUMMARY CARDS -->
+            <div class="stats">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Products</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-boxes"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value">{{ paginator.count }}</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Stock Units on This Page</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-layers"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value" id="totalUnits">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Low Stock on This Page</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value" id="lowStockCount">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Out of Stock on This Page</span>
+                        <span class="stat-icon">
+                            <i class="bi bi-box"></i>
+                        </span>
+                    </div>
+                    <div class="stat-value" id="outOfStockCount">0</div>
+                </div>
+
+            </div>
+
+            <!-- ADD / EDIT PRODUCT FORM -->
+            <section class="panel" id="productFormPanel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3 id="formTitle">Add New Product</h3>
+                        <p class="muted" style="margin-top:5px" id="formSubtitle">
+                            Enter the product details below.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+
+                    <form method="POST"
+                          enctype="multipart/form-data"
+                          id="productForm">
+
+                        {% csrf_token %}
+
+                        <input type="hidden"
+                               name="action"
+                               id="formAction"
+                               value="create">
+
+                        <input type="hidden"
+                               name="product_id"
+                               id="productId">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="productName">Product Name *</label>
+                                <input type="text"
+                                       name="name"
+                                       id="productName"
+                                       maxlength="200"
+                                       required
+                                       placeholder="Enter product name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productSku">SKU</label>
+                                <input type="text"
+                                       name="sku"
+                                       id="productSku"
+                                       maxlength="100"
+                                       placeholder="e.g. WRH-001">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productCategory">Category *</label>
+                                <input type="text"
+                                       name="category"
+                                       id="productCategory"
+                                       maxlength="100"
+                                       required
+                                       placeholder="Enter category">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productQuantity">Quantity *</label>
+                                <input type="number"
+                                       name="quantity"
+                                       id="productQuantity"
+                                       min="0"
+                                       step="1"
+                                       required
+                                       placeholder="Enter quantity">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPrice">Price (₹) *</label>
+                                <input type="number"
+                                       name="price"
+                                       id="productPrice"
+                                       min="0"
+                                       step="1"
+                                       required
+                                       placeholder="Enter price">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productSupplier">Supplier Name</label>
+                                <input type="text"
+                                       name="supplier"
+                                       id="productSupplier"
+                                       maxlength="200"
+                                       placeholder="Enter supplier name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productLocation">Warehouse Location</label>
+                                <input type="text"
+                                       name="location"
+                                       id="productLocation"
+                                       maxlength="200"
+                                       placeholder="e.g. Rack A-12">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productReorder">Reorder Level</label>
+                                <input type="number"
+                                       name="reorder_level"
+                                       id="productReorder"
+                                       min="0"
+                                       step="1"
+                                       value="10"
+                                       required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productExpiry">Expiry Date</label>
+                                <input type="date"
+                                       name="expiry_date"
+                                       id="productExpiry">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productManufacturing">
+                                    Manufacturing Date
+                                </label>
+                                <input type="date"
+                                       name="manufacturing_date"
+                                       id="productManufacturing">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productImage">
+                                    Product / Package Image
+                                </label>
+
+                                <input type="file"
+                                       name="image"
+                                       id="productImage"
+                                       accept="image/*">
+
+                                <img id="imagePreview"
+                                     class="image-preview"
+                                     alt="Product image preview">
+
+                                <small class="image-help">
+                                    Optional. Select a product or package photo.
+                                </small>
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="productDescription">
+                                    Product Description
+                                </label>
+                                <textarea name="description"
+                                          id="productDescription"
+                                          placeholder="Enter product details"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    id="submitButton">
+                                <i class="bi bi-plus-lg"></i> Add Product
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-light"
+                                    id="cancelEdit"
+                                    hidden>
+                                Cancel Edit
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+
+            <!-- INVENTORY TABLE -->
+            <section class="panel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>Product Inventory</h3>
+                        <p class="muted" style="margin-top:5px">
+                            Search and manage warehouse inventory.
+                        </p>
+                    </div>
+
+                    <span class="count">
+                        {{ paginator.count }} product(s)
+                    </span>
+                </div>
+
+                <!-- SEARCH AND FILTERS -->
+                <div class="panel-header">
+                    <div class="toolbar">
+
+                        <div class="search-box">
+                            <i class="bi bi-search"></i>
+                            <input type="search"
+                                   id="searchInput"
+                                   placeholder="Search current page...">
+                        </div>
+
+                        <select id="stockFilter" aria-label="Filter stock">
+                            <option value="">All stock levels</option>
+                            <option value="low">Low stock</option>
+                            <option value="out">Out of stock</option>
+                            <option value="good">Healthy stock</option>
+                        </select>
+
+                        <select id="sortFilter" aria-label="Sort products">
+                            <option value="newest">Newest first</option>
+                            <option value="name">Name A–Z</option>
+                            <option value="quantity">Quantity: low to high</option>
+                            <option value="price">Price: low to high</option>
+                        </select>
+
+                        <button type="button"
+                                class="btn btn-light"
+                                id="clearFilters">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table id="productsTable">
+
+                        <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Supplier</th>
+                            <th>Location</th>
+                            <th>Expiry Date</th>
+                            <th>Stock Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="productsBody">
+
+                        {% for product in products %}
+
+                            <tr class="product-row"
+                                data-id="{{ product.id }}"
+                                data-name="{{ product.name|escape }}"
+                                data-sku="{{ product.sku|escape }}"
+                                data-category="{{ product.category|escape }}"
+                                data-quantity="{{ product.quantity }}"
+                                data-price="{{ product.price }}"
+                                data-supplier="{{ product.supplier|default:''|escape }}"
+                                data-location="{{ product.location|default:''|escape }}"
+                                data-reorder="{{ product.reorder_level }}"
+                                data-expiry="{{ product.expiry_date|date:'Y-m-d'|default:'' }}"
+                                data-manufacturing="{{ product.manufacturing_date|date:'Y-m-d'|default:'' }}"
+                                data-description="{{ product.description|default:''|escape }}">
+
+                                <td>
+                                    {% if product.image %}
+                                        <img class="product-image"
+                                             src="{{ product.image.url }}"
+                                             alt="{{ product.name }}">
+                                    {% else %}
+                                        <span class="product-image image-placeholder">
+                                            <i class="bi bi-image"></i>
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="product-name">
+                                        {{ product.name }}
+                                    </div>
+                                    <div class="sku">
+                                        {% if product.sku %}
+                                            {{ product.sku }}
+                                        {% else %}
+                                            No SKU
+                                        {% endif %}
+                                    </div>
+                                </td>
+
+                                <td>{{ product.category }}</td>
+                                <td>{{ product.quantity }}</td>
+                                <td>₹{{ product.price }}</td>
+                                <td>{{ product.supplier|default:"Unknown Supplier" }}</td>
+                                <td>{{ product.location|default:"Main Warehouse" }}</td>
+
+                                <td>
+                                    {% if product.expiry_date %}
+                                        {{ product.expiry_date|date:"d M Y" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if product.quantity == 0 %}
+                                        <span class="stock-badge stock-out">
+                                            Out of stock
+                                        </span>
+                                    {% elif product.quantity <= product.reorder_level %}
+                                        <span class="stock-badge stock-low">
+                                            Low stock
+                                        </span>
+                                    {% else %}
+                                        <span class="stock-badge stock-good">
+                                            In stock
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="row-actions">
+
+                                        <button type="button"
+                                                class="btn btn-edit edit-product">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </button>
+
+                                        <form method="POST" class="delete-form">
+                                            {% csrf_token %}
+
+                                            <input type="hidden"
+                                                   name="action"
+                                                   value="delete">
+
+                                            <input type="hidden"
+                                                   name="product_id"
+                                                   value="{{ product.id }}">
+
+                                            <button type="submit"
+                                                    class="btn btn-delete"
+                                                    title="Delete product">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+                            <tr>
+                                <td colspan="10" class="empty">
+                                    <i class="bi bi-box-seam"></i>
+                                    <strong>No products available</strong>
+                                    <p style="margin-top:8px">
+                                        Add your first product using the form above.
+                                    </p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="pagination-container">
+
+                    <span class="pagination-info">
+                        {% if page_obj.paginator.count %}
+                            Showing {{ page_obj.start_index }}–{{ page_obj.end_index }}
+                            of {{ page_obj.paginator.count }} products
+                        {% else %}
+                            No products found
+                        {% endif %}
+                    </span>
+
+                    <div class="pagination">
+
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}"
+                               class="page-link">
+                                <i class="bi bi-chevron-left"></i> Previous
+                            </a>
+                        {% else %}
+                            <span class="page-link disabled">
+                                <i class="bi bi-chevron-left"></i> Previous
+                            </span>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="page-link active">{{ num }}</span>
+                            {% else %}
+                                <a href="?page={{ num }}" class="page-link">
+                                    {{ num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}"
+                               class="page-link">
+                                Next <i class="bi bi-chevron-right"></i>
+                            </a>
+                        {% else %}
+                            <span class="page-link disabled">
+                                Next <i class="bi bi-chevron-right"></i>
+                            </span>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <span id="visibleCount">
+                        Showing {{ products|length }} products on this page
+                    </span>
+                    <span>Wareloom Inventory</span>
+                </div>
+
+            </section>
+
+        </section>
+    </main>
+</div>
+
+<script>
+    const productForm = document.getElementById("productForm");
+    const formAction = document.getElementById("formAction");
+    const productId = document.getElementById("productId");
+    const productImage = document.getElementById("productImage");
+    const imagePreview = document.getElementById("imagePreview");
+
+    const fields = {
+        name: document.getElementById("productName"),
+        sku: document.getElementById("productSku"),
+        category: document.getElementById("productCategory"),
+        quantity: document.getElementById("productQuantity"),
+        price: document.getElementById("productPrice"),
+        supplier: document.getElementById("productSupplier"),
+        location: document.getElementById("productLocation"),
+        reorder: document.getElementById("productReorder"),
+        expiry: document.getElementById("productExpiry"),
+        manufacturing: document.getElementById("productManufacturing"),
+        description: document.getElementById("productDescription")
+    };
+
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+    const submitButton = document.getElementById("submitButton");
+    const cancelEdit = document.getElementById("cancelEdit");
+
+    // Product image preview
+    productImage.addEventListener("change", function () {
+        const file = this.files && this.files[0];
+
+        if (!file) {
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            alert("Please select a valid image file.");
+            this.value = "";
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+            return;
+        }
+
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreview.style.display = "block";
+    });
+
+    // Reset form
+    function resetProductForm() {
+        productForm.reset();
+
+        imagePreview.removeAttribute("src");
+        imagePreview.style.display = "none";
+
+        formAction.value = "create";
+        productId.value = "";
+        fields.reorder.value = 10;
+
+        formTitle.textContent = "Add New Product";
+        formSubtitle.textContent = "Enter the product details below.";
+
+        submitButton.innerHTML =
+            '<i class="bi bi-plus-lg"></i> Add Product';
+
+        cancelEdit.hidden = true;
+    }
+
+    document.getElementById("addProductButton")
+        .addEventListener("click", function () {
+            resetProductForm();
+
+            document.getElementById("productFormPanel").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
+
+    cancelEdit.addEventListener("click", resetProductForm);
+
+    // Edit product
+    document.querySelectorAll(".edit-product").forEach(button => {
+        button.addEventListener("click", function () {
+            const row = this.closest(".product-row");
+
+            productId.value = row.dataset.id;
+            formAction.value = "update";
+
+            fields.name.value = row.dataset.name;
+            fields.sku.value = row.dataset.sku;
+            fields.category.value = row.dataset.category;
+            fields.quantity.value = row.dataset.quantity;
+            fields.price.value = row.dataset.price;
+            fields.supplier.value = row.dataset.supplier;
+            fields.location.value = row.dataset.location;
+            fields.reorder.value = row.dataset.reorder;
+            fields.expiry.value = row.dataset.expiry;
+            fields.manufacturing.value = row.dataset.manufacturing;
+            fields.description.value = row.dataset.description;
+
+            // Keep the current image unless a replacement is selected.
+            productImage.value = "";
+            imagePreview.removeAttribute("src");
+            imagePreview.style.display = "none";
+
+            formTitle.textContent = "Edit Product";
+            formSubtitle.textContent =
+                "Update details. Choose a new image only if you want to replace it.";
+
+            submitButton.innerHTML =
+                '<i class="bi bi-check-lg"></i> Save Changes';
+
+            cancelEdit.hidden = false;
+
+            document.getElementById("productFormPanel").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            fields.name.focus();
+        });
+    });
+
+    // Confirm deletion
+    document.querySelectorAll(".delete-form").forEach(form => {
+        form.addEventListener("submit", function (event) {
+            if (!confirm("Are you sure you want to delete this product?")) {
+                event.preventDefault();
+            }
+        });
+    });
+
+    // Validate form values
+    productForm.addEventListener("submit", function (event) {
+        const quantity = Number(fields.quantity.value);
+        const price = Number(fields.price.value);
+        const reorder = Number(fields.reorder.value);
+
+        if (!Number.isInteger(quantity) || quantity < 0) {
+            event.preventDefault();
+            alert("Quantity must be a non-negative whole number.");
+            fields.quantity.focus();
+            return;
+        }
+
+        if (!Number.isFinite(price) || price < 0) {
+            event.preventDefault();
+            alert("Enter a valid non-negative price.");
+            fields.price.focus();
+            return;
+        }
+
+        if (!Number.isInteger(reorder) || reorder < 0) {
+            event.preventDefault();
+            alert("Reorder level must be a non-negative whole number.");
+            fields.reorder.focus();
+            return;
+        }
+
+        if (fields.expiry.value &&
+            fields.manufacturing.value &&
+            fields.expiry.value < fields.manufacturing.value) {
+            event.preventDefault();
+            alert("Expiry date cannot be before manufacturing date.");
+            fields.expiry.focus();
+        }
+    });
+
+    // Search, filter, and sort current page only
+    const searchInput = document.getElementById("searchInput");
+    const stockFilter = document.getElementById("stockFilter");
+    const sortFilter = document.getElementById("sortFilter");
+    const productsBody = document.getElementById("productsBody");
+    const visibleCount = document.getElementById("visibleCount");
+
+    const originalRows = Array.from(
+        productsBody.querySelectorAll(".product-row")
+    );
+
+    function getStockType(row) {
+        const quantity = Number(row.dataset.quantity);
+        const reorder = Number(row.dataset.reorder);
+
+        if (quantity === 0) return "out";
+        if (quantity <= reorder) return "low";
+        return "good";
+    }
+
+    function filterProducts() {
+        const query = searchInput.value.toLowerCase().trim();
+        const stock = stockFilter.value;
+        const sort = sortFilter.value;
+
+        let visibleRows = originalRows.filter(row => {
+            const text = [
+                row.dataset.name,
+                row.dataset.sku,
+                row.dataset.category,
+                row.dataset.supplier,
+                row.dataset.location,
+                row.textContent
+            ].join(" ").toLowerCase();
+
+            return text.includes(query) &&
+                (!stock || getStockType(row) === stock);
+        });
+
+        visibleRows.sort((a, b) => {
+            if (sort === "name") {
+                return a.dataset.name.localeCompare(b.dataset.name);
+            }
+
+            if (sort === "quantity") {
+                return Number(a.dataset.quantity) -
+                    Number(b.dataset.quantity);
+            }
+
+            if (sort === "price") {
+                return Number(a.dataset.price) -
+                    Number(b.dataset.price);
+            }
+
+            return Number(b.dataset.id) - Number(a.dataset.id);
+        });
+
+        originalRows.forEach(row => {
+            row.style.display = "none";
+        });
+
+        visibleRows.forEach(row => {
+            row.style.display = "";
+            productsBody.appendChild(row);
+        });
+
+        visibleCount.textContent =
+            `Showing ${visibleRows.length} products on this page`;
+    }
+
+    searchInput.addEventListener("input", filterProducts);
+    stockFilter.addEventListener("change", filterProducts);
+    sortFilter.addEventListener("change", filterProducts);
+
+    document.getElementById("clearFilters").addEventListener("click", () => {
+        searchInput.value = "";
+        stockFilter.value = "";
+        sortFilter.value = "newest";
+        filterProducts();
+    });
+
+    // Summary cards reflect the current page
+    function updateSummary() {
+        let totalUnits = 0;
+        let lowStock = 0;
+        let outOfStock = 0;
+
+        originalRows.forEach(row => {
+            const quantity = Number(row.dataset.quantity);
+            const reorder = Number(row.dataset.reorder);
+
+            totalUnits += quantity;
+
+            if (quantity === 0) {
+                outOfStock++;
+            } else if (quantity <= reorder) {
+                lowStock++;
+            }
+        });
+
+        document.getElementById("totalUnits").textContent = totalUnits;
+        document.getElementById("lowStockCount").textContent = lowStock;
+        document.getElementById("outOfStockCount").textContent = outOfStock;
+    }
+
+    updateSummary();
+    filterProducts();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Allow an example configuration file
+!.env.example
+
+# Python virtual environments
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django local database
+db.sqlite3
+db.sqlite3-journal
+
+# Collected static files
+staticfiles/
+
+# Environment and editor files
+.DS_Store
+.vscode/
