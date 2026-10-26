@@ -631,10 +631,8 @@
             </a>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="main">
 
-            <!-- TOP HEADER -->
             <header class="topbar">
                 <h1 class="topbar-title">Dashboard</h1>
 
@@ -651,14 +649,12 @@
 
             <section class="content">
 
-                <!-- WELCOME -->
                 <div class="welcome">
                     <h2>Welcome back, {{ username|default:request.user.username }}</h2>
                     <p>Here's what's happening in your warehouse today.</p>
                 </div>
 
 
-                <!-- MAIN METRICS -->
                 <div class="metrics">
 
                     <div class="metric-card">
@@ -707,7 +703,6 @@
 
                 </div>
 
-                <!-- SECONDARY METRICS -->
                 <div class="secondary-metrics">
 
                     <div class="secondary-card">
@@ -747,10 +742,8 @@
 
                 </div>
 
-                <!-- RECENT ORDERS AND PRODUCTS -->
                 <div class="tables-grid">
 
-                    <!-- RECENT ORDERS -->
                     <section class="panel">
                         <div class="panel-header">
                             <h3>Recent Orders</h3>
@@ -797,7 +790,6 @@
                         </div>
                     </section>
 
-                    <!-- RECENT PRODUCTS -->
                     <section class="panel">
                         <div class="panel-header">
                             <h3>Recent Products</h3>
@@ -814,7 +806,6 @@
                                     </tr>
                                 </thead>
 
-                                <!-- Recent Orders -->
                                 <tbody>
                                     {% for order in recent_orders %}
                                     <tr>
@@ -845,7 +836,6 @@
 
                 </div>
 
-                <!-- RECENT SHIPMENTS -->
                 <section class="panel">
                     <div class="panel-header">
                         <h3>Recent Shipments</h3>
@@ -864,7 +854,6 @@
                                 </tr>
                             </thead>
 
-                            <!-- Recent Shipments -->
                             <tbody>
                                 {% for shipment in recent_shipments %}
                                 <tr>
@@ -894,7 +883,6 @@
                     </div>
                 </section>
 
-                <!-- QUICK ACTIONS -->
                 <section class="quick-actions">
                     <div class="panel-header">
                         <h3>Quick Actions</h3>
@@ -923,7 +911,6 @@
                     </div>
                 </section>
 
-                <!-- FOOTER -->
                 <footer class="footer">
                     Wareloom Warehouse Management System
                 </footer>

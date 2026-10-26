@@ -437,7 +437,6 @@
         </a>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main">
         <header class="topbar">
             <h1>Analytics Overview</h1>
@@ -461,7 +460,6 @@
                 </div>
             </div>
 
-            <!-- KPI CARDS -->
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-top">
@@ -545,7 +543,6 @@
                 </div>
             </div>
 
-            <!-- CHARTS -->
             <div class="charts-grid">
                 <div class="panel">
                     <h3>Stock Health</h3>
@@ -596,7 +593,6 @@
                 </div>
             </div>
 
-            <!-- LOW STOCK TABLE -->
             <section class="panel table-panel">
                 <div class="panel-header">
                     <h3>Low Stock Alerts</h3>
@@ -654,7 +650,6 @@
     </main>
 </div>
 
-<!-- DJANGO DATA TO JAVASCRIPT -->
 {{ stock_chart_labels|json_script:"stock-labels-data" }}
 {{ stock_chart_values|json_script:"stock-values-data" }}
 {{ category_labels|json_script:"category-labels-data" }}

@@ -17,11 +17,7 @@
     <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
 
     <style>
-        /* =====================================================
-   WARELOOM — LANDING PAGE CSS
-   Theme: Solid Navy, Teal, Mint, White
-   No gradients
-===================================================== */
+        
 
         :root {
             --navy: #14283f;
@@ -38,7 +34,6 @@
             --shadow: 0 12px 35px rgba(18, 42, 65, .07);
         }
 
-        /* RESET */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -77,9 +72,6 @@
             margin: 0 auto;
         }
 
-        /* =====================================================
-   NAVBAR
-===================================================== */
 
         .site-header {
             position: sticky;
@@ -209,10 +201,7 @@
             cursor: pointer;
         }
 
-        /* =====================================================
-   HERO SECTION
-===================================================== */
-
+    
         .hero {
             position: relative;
             isolation: isolate;
@@ -222,7 +211,6 @@
             background: var(--navy);
         }
 
-        /* No decorative gradient circles */
         .hero::before,
         .hero::after {
             display: none;
@@ -316,9 +304,7 @@
             margin-left: 8px;
         }
 
-        /* =====================================================
-   OVERVIEW CARD
-===================================================== */
+    
 
         .overview-card {
             padding: 25px;
@@ -401,9 +387,7 @@
             font-size: 11px;
         }
 
-        /* =====================================================
-   GENERAL SECTIONS
-===================================================== */
+        
 
         .section {
             padding: 90px 0;
@@ -443,10 +427,6 @@
             font-size: 15px;
             line-height: 1.8;
         }
-
-        /* =====================================================
-   FEATURE CARDS
-===================================================== */
 
         .feature-grid {
             display: grid;
@@ -516,10 +496,7 @@
             color: var(--teal-dark);
         }
 
-        /* =====================================================
-   WORKFLOW
-===================================================== */
-
+       
         .workflow {
             background: var(--navy);
             color: var(--white);
@@ -575,9 +552,7 @@
             line-height: 1.8;
         }
 
-        /* =====================================================
-   ANALYTICS
-===================================================== */
+
 
         .analytics-grid {
             display: grid;
@@ -669,9 +644,6 @@
             font-size: 11px;
         }
 
-        /* =====================================================
-   SOLUTIONS
-===================================================== */
 
         .solution-grid {
             display: grid;
@@ -706,9 +678,7 @@
             line-height: 1.8;
         }
 
-        /* =====================================================
-   CALL TO ACTION — SOLID TEAL
-===================================================== */
+
 
         .cta {
             padding: 65px 0;
@@ -764,10 +734,7 @@
             background: var(--teal-dark);
         }
 
-        /* =====================================================
-   FOOTER
-===================================================== */
-
+        
         .footer {
             padding: 55px 0 20px;
             background: #101f31;
@@ -823,10 +790,6 @@
             font-size: 11px;
         }
 
-        /* =====================================================
-   RESPONSIVE — TABLETS
-===================================================== */
-
         @media (max-width: 1000px) {
             .nav-menu {
                 gap: 18px;
@@ -852,10 +815,6 @@
                 gap: 28px;
             }
         }
-
-        /* =====================================================
-   RESPONSIVE — MOBILE NAVBAR
-===================================================== */
 
         @media (max-width: 800px) {
             .navbar {
@@ -938,9 +897,7 @@
             }
         }
 
-        /* =====================================================
-   RESPONSIVE — SMALL MOBILE
-===================================================== */
+    
 
         @media (max-width: 520px) {
             .container {
@@ -1043,10 +1000,7 @@
             }
         }
 
-        /* =====================================================
-   ACCESSIBILITY AND INTERACTION
-===================================================== */
-
+    
         button:focus-visible,
         a:focus-visible {
             outline: 3px solid var(--mint);
@@ -1071,7 +1025,6 @@
 
 <body>
 
-    <!-- NAVIGATION -->
     <header class="site-header">
         <div class="container navbar">
 
@@ -1110,7 +1063,6 @@
 
     <main>
 
-        <!-- HERO -->
         <section class="hero" id="about">
             <div class="container hero-grid">
 
@@ -1180,7 +1132,6 @@
             </div>
         </section>
 
-        <!-- FEATURES -->
         <section class="section section-light" id="features">
             <div class="container">
                 <div class="section-heading">
@@ -1253,7 +1204,6 @@
             </div>
         </section>
 
-        <!-- WORKFLOW -->
         <section class="section workflow" id="workflow">
             <div class="container">
                 <div class="section-heading light-heading">
@@ -1299,7 +1249,6 @@
             </div>
         </section>
 
-        <!-- ANALYTICS -->
         <section class="section section-light" id="analytics">
             <div class="container analytics-grid">
 
@@ -1350,7 +1299,6 @@
             </div>
         </section>
 
-        <!-- SOLUTIONS -->
         <section class="section" id="solutions">
             <div class="container">
                 <div class="section-heading">
@@ -1393,7 +1341,6 @@
             </div>
         </section>
 
-        <!-- CALL TO ACTION -->
         <section class="cta" id="contact">
             <div class="container cta-inner">
                 <div>
@@ -1421,7 +1368,6 @@
 
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer" id="resources">
         <div class="container">
             <div class="footer-grid">
@@ -1478,7 +1424,6 @@
     </footer>
 
     <script>
-        // Responsive navigation menu
         const menuToggle = document.getElementById("menuToggle");
         const navMenu = document.getElementById("navMenu");
 
@@ -1495,7 +1440,6 @@
             icon.className = isOpen ? "bi bi-x-lg" : "bi bi-list";
         });
 
-        // Close mobile navigation after selecting a link
         navMenu.querySelectorAll("a").forEach(function (link) {
             link.addEventListener("click", function () {
                 navMenu.classList.remove("open");
@@ -1506,7 +1450,6 @@
             });
         });
 
-        // Close mobile menu when switching back to desktop
         window.addEventListener("resize", function () {
             if (window.innerWidth > 800) {
                 navMenu.classList.remove("open");

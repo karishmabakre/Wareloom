@@ -43,7 +43,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 220px;
             flex-shrink: 0;
@@ -84,7 +83,6 @@
             background: var(--teal);
         }
 
-        /* Main content */
         .main {
             flex: 1;
             min-width: 0;
@@ -145,7 +143,6 @@
             line-height: 1.6;
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -184,7 +181,6 @@
             color: #b52d2d;
         }
 
-        /* Summary cards */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -228,7 +224,6 @@
             font-weight: 700;
         }
 
-        /* Panels */
         .panel {
             background: white;
             border: 1px solid var(--border);
@@ -255,7 +250,6 @@
             padding: 22px;
         }
 
-        /* Product form */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -555,7 +549,6 @@
             display: none !important;
         }
 
-        /* Responsive */
         @media (max-width: 1100px) {
             .stats {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -617,7 +610,6 @@
 <body>
 <div class="layout">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="brand">
             <i class="bi bi-box-seam"></i> Wareloom
@@ -657,7 +649,6 @@
         </a>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main">
 
         <header class="topbar">
@@ -688,7 +679,6 @@
                 </button>
             </div>
 
-            <!-- DJANGO MESSAGES -->
             {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
@@ -699,7 +689,6 @@
                 </div>
             {% endif %}
 
-            <!-- SUMMARY CARDS -->
             <div class="stats">
 
                 <div class="stat-card">
@@ -744,7 +733,6 @@
 
             </div>
 
-            <!-- ADD / EDIT PRODUCT FORM -->
             <section class="panel" id="productFormPanel">
 
                 <div class="panel-header">
@@ -922,7 +910,6 @@
                 </div>
             </section>
 
-            <!-- INVENTORY TABLE -->
             <section class="panel">
 
                 <div class="panel-header">
@@ -938,7 +925,6 @@
                     </span>
                 </div>
 
-                <!-- SEARCH AND FILTERS -->
                 <div class="panel-header">
                     <div class="toolbar">
 
@@ -1110,7 +1096,6 @@
                     </table>
                 </div>
 
-                <!-- PAGINATION -->
                 <div class="pagination-container">
 
                     <span class="pagination-info">
@@ -1198,7 +1183,6 @@
     const submitButton = document.getElementById("submitButton");
     const cancelEdit = document.getElementById("cancelEdit");
 
-    // Product image preview
     productImage.addEventListener("change", function () {
         const file = this.files && this.files[0];
 
@@ -1220,7 +1204,6 @@
         imagePreview.style.display = "block";
     });
 
-    // Reset form
     function resetProductForm() {
         productForm.reset();
 
@@ -1252,7 +1235,6 @@
 
     cancelEdit.addEventListener("click", resetProductForm);
 
-    // Edit product
     document.querySelectorAll(".edit-product").forEach(button => {
         button.addEventListener("click", function () {
             const row = this.closest(".product-row");

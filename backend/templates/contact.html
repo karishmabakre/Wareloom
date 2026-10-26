@@ -707,25 +707,20 @@
 
 <body>
 
-    <!-- NAVBAR -->
-
     <header class="navbar">
         <div class="nav-container">
 
-            <!-- Left: Brand -->
             <a href="{% url 'home' %}" class="brand">
                 <span class="brand-icon">⬡</span>
                 <span class="brand-name">Wareloom</span>
             </a>
 
-            <!-- Center: Navigation -->
             <nav class="nav-links" id="navLinks">
                 <a href="{% url 'home' %}">Home</a>
                 <a href="{% url 'home' %}#features">Features</a>
                 <a href="{% url 'contact' %}" class="active">Contact</a>
             </nav>
 
-            <!-- Right: Authentication -->
             <div class="nav-actions" id="navActions">
                 {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="btn btn-primary">
@@ -741,7 +736,6 @@
                 {% endif %}
             </div>
 
-            <!-- Mobile menu -->
             <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle navigation"
                 aria-expanded="false">
                 ☰
@@ -751,7 +745,7 @@
     </header>
 
 
-    <!-- HERO -->
+   
     <section class="hero">
         <div class="hero-label">We're here to help</div>
         <h1>Let's start a <span>conversation.</span></h1>
@@ -762,7 +756,7 @@
         </p>
     </section>
 
-    <!-- CONTACT CONTENT -->
+    
     <main class="container">
 
         {% if messages %}
@@ -777,7 +771,7 @@
 
         <div class="contact-grid">
 
-            <!-- CONTACT INFORMATION -->
+           
             <aside class="contact-info">
                 <h2>Contact information</h2>
                 <p>
@@ -825,7 +819,7 @@
                 </div>
             </aside>
 
-            <!-- CONTACT FORM -->
+            
             <section class="contact-form">
                 <h2>Send us a message</h2>
                 <p class="form-description">
@@ -914,7 +908,7 @@
 
     </main>
 
-    <!-- FOOTER -->
+    
     <footer class="footer">
         <div class="footer-inner">
             <div>
