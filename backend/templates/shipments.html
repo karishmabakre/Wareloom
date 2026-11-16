@@ -544,12 +544,17 @@
                                     <label for="order">Order *</label>
                                     <select id="order" name="order" required>
                                         <option value="">Select an order</option>
+                                        {% if edit_shipment %}
+
                                         {% for order in available_orders %}
-                                        <option value="{{ order.pk }}" {% if edit_shipment and
-                                            edit_shipment.order_id==order.pk %}selected{% endif %}>
-                                            {{ order.order_number }} — {{ order.customer_name }}
+
+                                        <option value="{{ order.id }}">
+                                            {{ order.order_number }}
                                         </option>
+
                                         {% endfor %}
+
+                                        {% endif %}
                                     </select>
                                     {% if not available_orders %}
                                     <small class="muted">
@@ -571,18 +576,30 @@
                                         placeholder="e.g. Blue Dart" value="{{ edit_shipment.carrier|default:'' }}">
                                 </div>
 
+
+
                                 <div class="form-group">
                                     <label for="status">Shipment Status *</label>
+
                                     <select id="status" name="status" required>
                                         {% for value, label in status_choices %}
-                                        <option value="{{ value }}" {% if edit_shipment %} {% if
-                                            edit_shipment.status==value %}selected{% endif %} {% elif value=='Preparing'
-                                            %}selected{% endif %}>
+
+                                        {% if edit_shipment %}
+                                        <option value="{{ value }}" {% if edit_shipment.status==value %}selected{% endif
+                                            %}>
                                             {{ label }}
                                         </option>
+                                        {% else %}
+                                        <option value="{{ value }}" {% if value=='Preparing' %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endif %}
+
                                         {% endfor %}
                                     </select>
                                 </div>
+
+
 
                                 <div class="form-group">
                                     <label for="shipment_date">Shipment Date & Time</label>
@@ -619,8 +636,9 @@
                             <input type="search" name="q" placeholder="Search shipment, order, carrier..."
                                 value="{{ search_query }}">
 
-                            <select name="status">
-                                <option value="">All statuses</option>
+                            <select name="status" id="status_filter">
+                                <option value="">All Statuses</option>
+
                                 {% for value, label in status_choices %}
                                 <option value="{{ value }}" {% if status_filter==value %}selected{% endif %}>
                                     {{ label }}
@@ -757,4 +775,5 @@
         </main>
     </div>
 </body>
+
 </html>

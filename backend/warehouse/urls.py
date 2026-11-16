@@ -69,6 +69,11 @@ path(
     views.export_report_csv,
     name="export_report_csv",
 ),
+path(
+    "profile/",
+    views.profile_view,
+    name="profile"
+),
 
 ]
 if settings.DEBUG:

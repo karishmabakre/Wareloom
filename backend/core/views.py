@@ -16,6 +16,9 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
 
+from .models import UserProfile
+from .forms import UserProfileForm
+
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -1748,3 +1751,51 @@ def export_report_csv(request, report_type):
         )
 
     return response
+#-----------------------------------------------------
+#profile 
+@login_required
+def profile_view(request):
+
+    profile, created = UserProfile.objects.get_or_create(
+        user=request.user
+    )
+
+    if request.method == "POST":
+
+        form = UserProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile,
+            user=request.user
+        )
+
+        if form.is_valid():
+            form.save()
+
+            messages.success(
+                request,
+                "Your profile has been updated successfully!"
+            )
+
+            return redirect("profile")
+
+        messages.error(
+            request,
+            "Please correct the errors below."
+        )
+
+    else:
+        form = UserProfileForm(
+            instance=profile,
+            user=request.user
+        )
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "form": form,
+            "profile": profile,
+            "user": request.user
+        }
+    )

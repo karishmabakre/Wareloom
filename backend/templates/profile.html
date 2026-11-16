@@ -1,0 +1,1154 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#103f5c">
+
+    <title>My Profile | Wareloom</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --navy: #103f5c;
+            --navy-dark: #0b3047;
+            --teal: #078b98;
+            --teal-dark: #06747e;
+            --ink: #183247;
+            --muted: #718397;
+            --page: #f3f6fa;
+            --line: #e4ebf1;
+            --white: #ffffff;
+            --success-bg: #eaf8f3;
+            --success: #18794e;
+            --error-bg: #fff0ef;
+            --error: #b42318;
+            --shadow: 0 12px 34px rgba(16, 63, 92, .07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--page);
+            color: var(--ink);
+            font-family: "DM Sans", sans-serif;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* MAIN LAYOUT */
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            width: 258px;
+            padding: 27px 17px 20px;
+            overflow-y: auto;
+            color: #eaf4f8;
+            background: linear-gradient(
+                180deg,
+                var(--navy) 0%,
+                var(--navy-dark) 100%
+            );
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 13px;
+            margin-bottom: 37px;
+            color: var(--white);
+            font-family: "Manrope", sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .brand-icon {
+            display: grid;
+            width: 39px;
+            height: 39px;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 12px;
+            background: rgba(255,255,255,.12);
+            color: #72e0df;
+            font-size: 20px;
+        }
+
+        .nav-label {
+            padding: 0 13px;
+            margin: 20px 0 9px;
+            color: #91adbd;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-height: 45px;
+            padding: 11px 13px;
+            margin: 3px 0;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: #d5e5ed;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .nav-link i {
+            width: 19px;
+            color: #a9c5d2;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .nav-link:hover {
+            transform: translateX(2px);
+            background: rgba(255,255,255,.09);
+            color: white;
+        }
+
+        .nav-link.active {
+            border-color: rgba(99,224,220,.18);
+            background: rgba(7,139,152,.28);
+            color: white;
+        }
+
+        .nav-link.active i {
+            color: #72e0df;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .sidebar-note {
+            padding: 13px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 11px;
+            background: rgba(255,255,255,.06);
+            color: #b9ced8;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* MAIN CONTENT */
+
+        .main {
+            width: calc(100% - 258px);
+            min-width: 0;
+            margin-left: 258px;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 78px;
+            padding: 15px 38px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255,255,255,.94);
+            backdrop-filter: blur(12px);
+        }
+
+        .topbar-title h1 {
+            margin: 0;
+            color: var(--navy);
+            font-family: "Manrope", sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .breadcrumb {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .topbar-avatar {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            overflow: hidden;
+            place-items: center;
+            border: 2px solid #dceff0;
+            border-radius: 50%;
+            background: #e9f6f6;
+            color: var(--teal);
+            font-size: 16px;
+        }
+
+        .topbar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* PAGE CONTENT */
+
+        .content {
+            width: min(1050px, 100%);
+            padding: 35px 38px 50px;
+            margin: 0 auto;
+        }
+
+        .page-intro {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            margin-bottom: 7px;
+            color: var(--teal);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+        }
+
+        .page-intro h2 {
+            color: var(--navy);
+            font-family: "Manrope", sans-serif;
+            font-size: clamp(24px, 3vw, 30px);
+            font-weight: 800;
+            letter-spacing: -.9px;
+        }
+
+        .page-intro p {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* PROFILE CARD */
+
+        .profile-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 22px 27px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .card-heading h3 {
+            color: var(--navy);
+            font-family: "Manrope", sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .card-heading p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .secure-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border-radius: 30px;
+            background: #eef8f8;
+            color: var(--teal-dark);
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .profile-form {
+            padding: 27px;
+        }
+
+        /* PROFILE IMAGE */
+
+        .photo-panel {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+            padding: 19px;
+            margin-bottom: 27px;
+            border: 1px solid #e3eeee;
+            border-radius: 13px;
+            background: #f8fbfc;
+        }
+
+        .avatar-wrap {
+            flex: 0 0 auto;
+            width: 104px;
+            height: 104px;
+        }
+
+        .avatar,
+        .avatar-placeholder {
+            display: grid;
+            width: 104px;
+            height: 104px;
+            overflow: hidden;
+            place-items: center;
+            border: 4px solid white;
+            border-radius: 50%;
+            background: #e3f3f3;
+            box-shadow: 0 0 0 1px #d9e9e9,
+                        0 5px 16px rgba(16,63,92,.10);
+            color: var(--teal);
+            font-size: 36px;
+        }
+
+        .avatar {
+            object-fit: cover;
+        }
+
+        .photo-copy {
+            min-width: 0;
+        }
+
+        .photo-copy h4 {
+            margin-bottom: 5px;
+            color: var(--navy);
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .photo-copy p {
+            margin-bottom: 13px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .upload-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            border: 1px solid #cfe3e5;
+            border-radius: 8px;
+            background: white;
+            color: var(--teal-dark);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+
+        .upload-control:hover {
+            border-color: var(--teal);
+            background: #eefafa;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+        }
+
+        .file-name {
+            display: inline-block;
+            max-width: 260px;
+            margin-left: 8px;
+            overflow: hidden;
+            color: var(--muted);
+            font-size: 11px;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .help-text {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* FORM FIELDS */
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 17px;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .section-label i {
+            color: var(--teal);
+            font-size: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 20px;
+        }
+
+        .field {
+            margin-bottom: 19px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #42596d;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .field input {
+            display: block;
+            width: 100%;
+            min-height: 45px;
+            padding: 11px 13px;
+            border: 1px solid #dce5ec;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+            color: var(--ink);
+            font-family: inherit;
+            font-size: 13px;
+            transition: .2s ease;
+        }
+
+        .field input:hover {
+            border-color: #b9cbd6;
+        }
+
+        .field input:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(7,139,152,.10);
+        }
+
+        .field input[readonly] {
+            border-color: #e5ebf0;
+            background: #f5f7f9;
+            color: #718397;
+            cursor: not-allowed;
+        }
+
+        .field-error,
+        .errorlist {
+            margin-top: 7px;
+            color: var(--error);
+            font-size: 11px;
+            line-height: 1.5;
+            list-style: none;
+        }
+
+        /* DJANGO MESSAGES */
+
+        .messages {
+            padding: 0 27px;
+            margin: 20px 0 0;
+            list-style: none;
+        }
+
+        .messages li {
+            padding: 12px 14px;
+            margin-bottom: 9px;
+            border: 1px solid #cceadd;
+            border-radius: 9px;
+            background: var(--success-bg);
+            color: var(--success);
+            font-size: 12px;
+        }
+
+        .messages li.error {
+            border-color: #f4cfcc;
+            background: var(--error-bg);
+            color: var(--error);
+        }
+
+        /* BUTTONS */
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 21px;
+            margin-top: 7px;
+            border-top: 1px solid var(--line);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 10px 17px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+            box-shadow: 0 5px 12px rgba(7,139,152,.17);
+        }
+
+        .btn-primary:hover {
+            background: var(--teal-dark);
+        }
+
+        .btn-secondary {
+            border-color: #dce5ec;
+            background: white;
+            color: #52677a;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f8fa;
+        }
+
+        .footer-note {
+            margin-top: 17px;
+            color: #8797a5;
+            font-size: 10px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 1050px) {
+            .sidebar {
+                width: 225px;
+            }
+
+            .main {
+                width: calc(100% - 225px);
+                margin-left: 225px;
+            }
+
+            .content {
+                padding-right: 25px;
+                padding-left: 25px;
+            }
+
+            .topbar {
+                padding-right: 25px;
+                padding-left: 25px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                max-height: none;
+                padding: 16px;
+            }
+
+            .sidebar-brand {
+                margin-bottom: 12px;
+            }
+
+            .nav-label {
+                margin-top: 12px;
+            }
+
+            .sidebar .nav-link {
+                display: inline-flex;
+                min-height: 38px;
+                padding: 8px 10px;
+                margin: 2px;
+                font-size: 11px;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .sidebar-bottom {
+                margin-top: 5px;
+                padding-top: 0;
+            }
+
+            .main {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .topbar {
+                position: static;
+                min-height: 66px;
+                padding: 13px 20px;
+            }
+
+            .content {
+                padding: 25px 18px 35px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .page-intro {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .card-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 19px;
+            }
+
+            .profile-form {
+                padding: 19px;
+            }
+
+            .messages {
+                padding: 0 19px;
+            }
+
+            .photo-panel {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+                padding: 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                align-items: stretch;
+                flex-direction: column-reverse;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+            }
+
+            .topbar-user span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <span class="brand-icon">
+                <i class="bi bi-box-seam"></i>
+            </span>
+            <span>Wareloom</span>
+        </div>
+
+        <div class="nav-label">MAIN</div>
+
+        <a href="{% url 'dashboard' %}" class="nav-link">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{% url 'products' %}" class="nav-link">
+            <i class="bi bi-boxes"></i>
+            <span>Inventory</span>
+        </a>
+
+        <a href="{% url 'orders' %}" class="nav-link">
+            <i class="bi bi-cart3"></i>
+            <span>Orders</span>
+        </a>
+
+        <a href="{% url 'shipments' %}" class="nav-link">
+            <i class="bi bi-truck"></i>
+            <span>Shipments</span>
+        </a>
+
+        <div class="nav-label">MANAGEMENT</div>
+
+        <a href="{% url 'analytics' %}" class="nav-link">
+            <i class="bi bi-bar-chart"></i>
+            <span>Analytics</span>
+        </a>
+
+        <a href="{% url 'expiry_rescue' %}" class="nav-link">
+            <i class="bi bi-calendar-event"></i>
+            <span>Expiry Rescue</span>
+        </a>
+
+        <a href="{% url 'stock_sense' %}" class="nav-link">
+            <i class="bi bi-graph-down-arrow"></i>
+            <span>StockSense</span>
+        </a>
+
+        <a href="{% url 'inventory_time_machine' %}" class="nav-link">
+            <i class="bi bi-clock-history"></i>
+            <span>Inventory Time Machine</span>
+        </a>
+
+        <a href="{% url 'reports_alerts' %}" class="nav-link">
+            <i class="bi bi-bell"></i>
+            <span>Reports &amp; Alerts</span>
+        </a>
+
+        <div class="nav-label">ACCOUNT</div>
+
+        <a href="{% url 'profile' %}"
+           class="nav-link active"
+           aria-current="page">
+            <i class="bi bi-person-circle"></i>
+            <span>My Profile</span>
+        </a>
+
+        <a href="{% url 'home' %}" class="nav-link">
+            <i class="bi bi-house"></i>
+            <span>Landing Page</span>
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-link">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                <i class="bi bi-shield-check"></i>
+                Your account details are managed securely through Wareloom.
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="topbar-title">
+                <h1>Account Settings</h1>
+                <div class="breadcrumb">
+                    Wareloom / Account / My Profile
+                </div>
+            </div>
+
+            <div class="topbar-user">
+
+                <div class="topbar-avatar">
+
+                    {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}"
+                             alt="Profile picture">
+                    {% else %}
+                        <i class="bi bi-person"></i>
+                    {% endif %}
+
+                </div>
+
+                <span>{{ user.username }}</span>
+
+            </div>
+
+        </header>
+
+        <!-- PROFILE PAGE -->
+        <section class="content">
+
+            <div class="page-intro">
+
+                <div>
+                    <p class="eyebrow">Account management</p>
+                    <h2>My Profile</h2>
+
+                    <p>
+                        Manage your personal information and profile picture.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- PROFILE CARD -->
+            <section class="profile-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <h3>Personal Information</h3>
+
+                        <p>
+                            Keep your account details up to date.
+                        </p>
+                    </div>
+
+                    <span class="secure-label">
+                        <i class="bi bi-shield-check"></i>
+                        Account protected
+                    </span>
+
+                </div>
+
+                <!-- DJANGO MESSAGES -->
+                {% if messages %}
+
+                    <ul class="messages" aria-live="polite">
+
+                        {% for message in messages %}
+
+                            <li class="{% if message.tags == 'error' %}error{% endif %}">
+                                {{ message }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% endif %}
+
+                <!-- PROFILE FORM -->
+                <form class="profile-form"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="field-error">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <!-- PROFILE IMAGE -->
+                    <h4 class="section-label">
+                        <i class="bi bi-camera"></i>
+                        Profile photograph
+                    </h4>
+
+                    <div class="photo-panel">
+
+                        <div class="avatar-wrap">
+
+                            {% if profile.profile_image %}
+
+                                <img src="{{ profile.profile_image.url }}"
+                                     class="avatar"
+                                     id="avatarPreview"
+                                     alt="Current profile picture">
+
+                                <div class="avatar-placeholder"
+                                     id="avatarPlaceholder"
+                                     style="display:none;">
+                                    <i class="bi bi-person"></i>
+                                </div>
+
+                            {% else %}
+
+                                <div class="avatar-placeholder"
+                                     id="avatarPlaceholder">
+                                    <i class="bi bi-person"></i>
+                                </div>
+
+                                <img src=""
+                                     class="avatar"
+                                     id="avatarPreview"
+                                     alt="Selected profile picture"
+                                     style="display:none;">
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="photo-copy">
+
+                            <h4>
+                                {{ user.get_full_name|default:user.username }}
+                            </h4>
+
+                            <p>
+                                Choose a clear image so your account is easy to identify.
+                            </p>
+
+                            <label for="id_profile_image"
+                                   class="upload-control">
+
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                Choose image
+
+                            </label>
+
+                            <input type="file"
+                                   name="profile_image"
+                                   accept=".jpg,.jpeg,.png,,image/jpeg,image/png,image"
+                                   id="id_profile_image"
+                                   class="file-input">
+
+                            <span class="file-name" id="fileName">
+                                No file selected
+                            </span>
+
+                            <p class="help-text">
+                                JPG, JPEG or PNG · Maximum size 2 MB
+                            </p>
+
+                            {% for error in form.profile_image.errors %}
+
+                                <p class="field-error">
+                                    {{ error }}
+                                </p>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    <!-- PERSONAL DETAILS -->
+                    <h4 class="section-label">
+                        <i class="bi bi-person-vcard"></i>
+                        Personal details
+                    </h4>
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label for="{{ form.first_name.id_for_label }}">
+                                First name
+                            </label>
+
+                            {{ form.first_name }}
+
+                            {% for error in form.first_name.errors %}
+                                <p class="field-error">{{ error }}</p>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="{{ form.last_name.id_for_label }}">
+                                Last name
+                            </label>
+
+                            {{ form.last_name }}
+
+                            {% for error in form.last_name.errors %}
+                                <p class="field-error">{{ error }}</p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="field">
+
+                        <label for="{{ form.email.id_for_label }}">
+                            Email address
+                        </label>
+
+                        {{ form.email }}
+
+                        {% for error in form.email.errors %}
+                            <p class="field-error">{{ error }}</p>
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="field">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input type="text"
+                               id="username"
+                               value="{{ user.username }}"
+                               readonly>
+
+                        <p class="help-text">
+                            Your username cannot be changed from this page.
+                        </p>
+
+                    </div>
+
+                    <!-- FORM ACTIONS -->
+                    <div class="form-actions">
+
+                        <a href="{% url 'dashboard' %}"
+                           class="btn btn-secondary">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Back to dashboard
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <i class="bi bi-check2-circle"></i>
+                            Save changes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <p class="footer-note">
+                Wareloom · Smart Warehouse Management System
+            </p>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- IMAGE PREVIEW AND CLIENT-SIDE VALIDATION -->
+<script>
+
+    const imageInput = document.getElementById("id_profile_image");
+    const preview = document.getElementById("avatarPreview");
+    const placeholder = document.getElementById("avatarPlaceholder");
+    const fileName = document.getElementById("fileName");
+
+    if (imageInput) {
+
+        imageInput.addEventListener("change", function () {
+
+            const file = this.files && this.files[0];
+
+            if (!file) {
+                fileName.textContent = "No file selected";
+                return;
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert("Please choose a JPG, PNG image.");
+
+                this.value = "";
+                fileName.textContent = "No file selected";
+
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+
+                alert("The image must not exceed 2 MB.");
+
+                this.value = "";
+                fileName.textContent = "No file selected";
+
+                return;
+            }
+
+            fileName.textContent = file.name;
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                preview.src = event.target.result;
+                preview.style.display = "block";
+
+                if (placeholder) {
+                    placeholder.style.display = "none";
+                }
+
+            };
+
+            reader.readAsDataURL(file);
+
+        });
+
+    }
+
+</script>
+
+</body>
+</html>
