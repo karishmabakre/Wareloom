@@ -24,3 +24,28 @@ staticfiles/
 # Environment and editor files
 .DS_Store
 .vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+env/
+
+# Django
+*.log
+staticfiles/
+media/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Local databases and backups
+db.sqlite3
+*.sqlite3
+backup.json
+*.bak
+
+# IDE
+.vscode/
+.idea/

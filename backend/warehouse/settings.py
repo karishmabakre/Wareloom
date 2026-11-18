@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+import dj_database_url
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -27,14 +30,15 @@ SECRET_KEY = os.getenv(
     "django-insecure-local-development-only"
 )
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        "DJANGO_ALLOWED_HOSTS",
-        "127.0.0.1,localhost"
-    ).split(",")
-    if host.strip()
-]
+# ALLOWED_HOSTS = [
+#     host.strip()
+#     for host in os.getenv(
+#         "DJANGO_ALLOWED_HOSTS",
+#         "127.0.0.1,localhost"
+#     ).split(",")
+#     if host.strip()
+# ]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # SECRET_KEY = 'django-insecure-(%3cui1*anl-8h$z^gt-iv0n%!7#0_hd^!3d+e4$l^jey$ac2y'
 if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY is not configured")
@@ -64,6 +68,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'warehouse.urls'
@@ -90,14 +97,31 @@ WSGI_APPLICATION = 'warehouse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Database Configuration
+# Local development: SQLite
+# Deployment: Neon PostgreSQL
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
-}
-
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
@@ -133,7 +157,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
