@@ -50,8 +50,7 @@ if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY is not configured")
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # SECRET_KEY = 'django-insecure-(%3cui1*anl-8h$z^gt-iv0n%!7#0_hd^!3d+e4$l^jey$ac2y'
-if not SECRET_KEY:
-    raise RuntimeError("SECRET_KEY is not configured")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # DEBUG = False
