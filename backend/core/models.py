@@ -150,7 +150,7 @@ class orders(models.Model):
     shipping_method = models.CharField(
         max_length=20,
         choices=SHIPPING_METHODS,
-        default='Standard'
+        default='Standard Shipping'
     )
     tracking_number = models.CharField(
         max_length=100, blank=True
