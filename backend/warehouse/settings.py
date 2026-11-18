@@ -30,15 +30,26 @@ SECRET_KEY = os.getenv(
     "django-insecure-local-development-only"
 )
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
-# ALLOWED_HOSTS = [
-#     host.strip()
-#     for host in os.getenv(
-#         "DJANGO_ALLOWED_HOSTS",
-#         "127.0.0.1,localhost"
-#     ).split(",")
-#     if host.strip()
-# ]
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0.1,localhost"
+    ).split(",")
+    if host.strip()
+]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        ""
+    ).split(",")
+    if origin.strip()
+]
+if not SECRET_KEY or SECRET_KEY == "django-insecure-local-development-only":
+    if not DEBUG:
+        raise RuntimeError("A production SECRET_KEY must be configured")
+# ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # SECRET_KEY = 'django-insecure-(%3cui1*anl-8h$z^gt-iv0n%!7#0_hd^!3d+e4$l^jey$ac2y'
 if not SECRET_KEY:
     raise RuntimeError("DJANGO_SECRET_KEY is not configured")
@@ -62,15 +73,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'warehouse.urls'
@@ -151,7 +160,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
