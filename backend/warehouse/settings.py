@@ -25,18 +25,18 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-)
+SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
-        "DJANGO_ALLOWED_HOSTS",
+        "ALLOWED_HOSTS",
         "127.0.0.1,localhost"
     ).split(",")
     if host.strip()
 ]
+
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
@@ -45,13 +45,13 @@ CSRF_TRUSTED_ORIGINS = [
     ).split(",")
     if origin.strip()
 ]
-if not SECRET_KEY or SECRET_KEY == "django-insecure-local-development-only":
-    if not DEBUG:
-        raise RuntimeError("A production SECRET_KEY must be configured")
+
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY is not configured")
 # ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # SECRET_KEY = 'django-insecure-(%3cui1*anl-8h$z^gt-iv0n%!7#0_hd^!3d+e4$l^jey$ac2y'
 if not SECRET_KEY:
-    raise RuntimeError("DJANGO_SECRET_KEY is not configured")
+    raise RuntimeError("SECRET_KEY is not configured")
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # DEBUG = False
