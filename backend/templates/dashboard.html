@@ -641,7 +641,7 @@
 
                 <div class="user-info">
                     <span class="username">
-                        Welcome, {{ username|default:request.user.username }}
+                        Welcome, {{ request.user.first_name|default:request.user.username }}
                     </span>
 
                     <a href="{% url 'logout' %}" class="logout-btn">
@@ -653,7 +653,8 @@
             <section class="content">
 
                 <div class="welcome">
-                    <h2>Welcome back, {{ username|default:request.user.username }}</h2>
+                    <h2> Welcome, {{ request.user.first_name|default:request.user.username }}
+                    </h2>
                     <p>Here's what's happening in your warehouse today.</p>
                 </div>
 

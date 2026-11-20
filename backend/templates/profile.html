@@ -1,7 +1,7 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +11,15 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
 
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/logo.png' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -70,11 +77,9 @@
             padding: 27px 17px 20px;
             overflow-y: auto;
             color: #eaf4f8;
-            background: linear-gradient(
-                180deg,
-                var(--navy) 0%,
-                var(--navy-dark) 100%
-            );
+            background: linear-gradient(180deg,
+                    var(--navy) 0%,
+                    var(--navy-dark) 100%);
         }
 
         .sidebar-brand {
@@ -95,9 +100,9 @@
             width: 39px;
             height: 39px;
             place-items: center;
-            border: 1px solid rgba(255,255,255,.18);
+            border: 1px solid rgba(255, 255, 255, .18);
             border-radius: 12px;
-            background: rgba(255,255,255,.12);
+            background: rgba(255, 255, 255, .12);
             color: #72e0df;
             font-size: 20px;
         }
@@ -136,13 +141,13 @@
 
         .nav-link:hover {
             transform: translateX(2px);
-            background: rgba(255,255,255,.09);
+            background: rgba(255, 255, 255, .09);
             color: white;
         }
 
         .nav-link.active {
-            border-color: rgba(99,224,220,.18);
-            background: rgba(7,139,152,.28);
+            border-color: rgba(99, 224, 220, .18);
+            background: rgba(7, 139, 152, .28);
             color: white;
         }
 
@@ -157,9 +162,9 @@
 
         .sidebar-note {
             padding: 13px;
-            border: 1px solid rgba(255,255,255,.12);
+            border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 11px;
-            background: rgba(255,255,255,.06);
+            background: rgba(255, 255, 255, .06);
             color: #b9ced8;
             font-size: 11px;
             line-height: 1.6;
@@ -185,7 +190,7 @@
             min-height: 78px;
             padding: 15px 38px;
             border-bottom: 1px solid var(--line);
-            background: rgba(255,255,255,.94);
+            background: rgba(255, 255, 255, .94);
             backdrop-filter: blur(12px);
         }
 
@@ -319,7 +324,6 @@
             padding: 27px;
         }
 
-        /* PROFILE IMAGE */
 
         .photo-panel {
             display: flex;
@@ -349,7 +353,7 @@
             border-radius: 50%;
             background: #e3f3f3;
             box-shadow: 0 0 0 1px #d9e9e9,
-                        0 5px 16px rgba(16,63,92,.10);
+                0 5px 16px rgba(16, 63, 92, .10);
             color: var(--teal);
             font-size: 36px;
         }
@@ -422,8 +426,6 @@
             font-size: 11px;
         }
 
-        /* FORM FIELDS */
-
         .section-label {
             display: flex;
             align-items: center;
@@ -478,7 +480,7 @@
 
         .field input:focus {
             border-color: var(--teal);
-            box-shadow: 0 0 0 3px rgba(7,139,152,.10);
+            box-shadow: 0 0 0 3px rgba(7, 139, 152, .10);
         }
 
         .field input[readonly] {
@@ -557,7 +559,7 @@
         .btn-primary {
             background: var(--teal);
             color: white;
-            box-shadow: 0 5px 12px rgba(7,139,152,.17);
+            box-shadow: 0 5px 12px rgba(7, 139, 152, .17);
         }
 
         .btn-primary:hover {
@@ -707,448 +709,420 @@
 
 <body>
 
-<div class="layout">
+    <div class="layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <div class="sidebar-brand">
-            <span class="brand-icon">
-                <i class="bi bi-box-seam"></i>
-            </span>
-            <span>Wareloom</span>
-        </div>
-
-        <div class="nav-label">MAIN</div>
-
-        <a href="{% url 'dashboard' %}" class="nav-link">
-            <i class="bi bi-grid"></i>
-            <span>Dashboard</span>
-        </a>
-
-        <a href="{% url 'products' %}" class="nav-link">
-            <i class="bi bi-boxes"></i>
-            <span>Inventory</span>
-        </a>
-
-        <a href="{% url 'orders' %}" class="nav-link">
-            <i class="bi bi-cart3"></i>
-            <span>Orders</span>
-        </a>
-
-        <a href="{% url 'shipments' %}" class="nav-link">
-            <i class="bi bi-truck"></i>
-            <span>Shipments</span>
-        </a>
-
-        <div class="nav-label">MANAGEMENT</div>
-
-        <a href="{% url 'analytics' %}" class="nav-link">
-            <i class="bi bi-bar-chart"></i>
-            <span>Analytics</span>
-        </a>
-
-        <a href="{% url 'expiry_rescue' %}" class="nav-link">
-            <i class="bi bi-calendar-event"></i>
-            <span>Expiry Rescue</span>
-        </a>
-
-        <a href="{% url 'stock_sense' %}" class="nav-link">
-            <i class="bi bi-graph-down-arrow"></i>
-            <span>StockSense</span>
-        </a>
-
-        <a href="{% url 'inventory_time_machine' %}" class="nav-link">
-            <i class="bi bi-clock-history"></i>
-            <span>Inventory Time Machine</span>
-        </a>
-
-        <a href="{% url 'reports_alerts' %}" class="nav-link">
-            <i class="bi bi-bell"></i>
-            <span>Reports &amp; Alerts</span>
-        </a>
-
-        <div class="nav-label">ACCOUNT</div>
-
-        <a href="{% url 'profile' %}"
-           class="nav-link active"
-           aria-current="page">
-            <i class="bi bi-person-circle"></i>
-            <span>My Profile</span>
-        </a>
-
-        <a href="{% url 'home' %}" class="nav-link">
-            <i class="bi bi-house"></i>
-            <span>Landing Page</span>
-        </a>
-
-        <a href="{% url 'logout' %}" class="nav-link">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Logout</span>
-        </a>
-
-        <div class="sidebar-bottom">
-            <div class="sidebar-note">
-                <i class="bi bi-shield-check"></i>
-                Your account details are managed securely through Wareloom.
+            <div class="sidebar-brand">
+                <span class="brand-icon">
+                    <i class="bi bi-box-seam"></i>
+                </span>
+                <span>Wareloom</span>
             </div>
-        </div>
 
-    </aside>
+            <div class="nav-label">MAIN</div>
 
-    <!-- MAIN CONTENT -->
-    <main class="main">
+            <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
 
-        <!-- TOPBAR -->
-        <header class="topbar">
+            <a href="{% url 'products' %}" class="nav-link">
+                <i class="bi bi-boxes"></i>
+                <span>Inventory</span>
+            </a>
 
-            <div class="topbar-title">
-                <h1>Account Settings</h1>
-                <div class="breadcrumb">
-                    Wareloom / Account / My Profile
+            <a href="{% url 'orders' %}" class="nav-link">
+                <i class="bi bi-cart3"></i>
+                <span>Orders</span>
+            </a>
+
+            <a href="{% url 'shipments' %}" class="nav-link">
+                <i class="bi bi-truck"></i>
+                <span>Shipments</span>
+            </a>
+
+            <div class="nav-label">MANAGEMENT</div>
+
+            <a href="{% url 'analytics' %}" class="nav-link">
+                <i class="bi bi-bar-chart"></i>
+                <span>Analytics</span>
+            </a>
+
+            <a href="{% url 'expiry_rescue' %}" class="nav-link">
+                <i class="bi bi-calendar-event"></i>
+                <span>Expiry Rescue</span>
+            </a>
+
+            <a href="{% url 'stock_sense' %}" class="nav-link">
+                <i class="bi bi-graph-down-arrow"></i>
+                <span>StockSense</span>
+            </a>
+
+            <a href="{% url 'inventory_time_machine' %}" class="nav-link">
+                <i class="bi bi-clock-history"></i>
+                <span>Inventory Time Machine</span>
+            </a>
+
+            <a href="{% url 'reports_alerts' %}" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Reports &amp; Alerts</span>
+            </a>
+
+            <div class="nav-label">ACCOUNT</div>
+
+            <a href="{% url 'profile' %}" class="nav-link active" aria-current="page">
+                <i class="bi bi-person-circle"></i>
+                <span>My Profile</span>
+            </a>
+
+            <a href="{% url 'home' %}" class="nav-link">
+                <i class="bi bi-house"></i>
+                <span>Landing Page</span>
+            </a>
+
+            <a href="{% url 'logout' %}" class="nav-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-note">
+                    <i class="bi bi-shield-check"></i>
+                    Your account details are managed securely through Wareloom.
                 </div>
             </div>
 
-            <div class="topbar-user">
+        </aside>
 
-                <div class="topbar-avatar">
+        <main class="main">
 
-                    {% if profile.profile_image %}
-                        <img src="{{ profile.profile_image.url }}"
-                             alt="Profile picture">
-                    {% else %}
+            <header class="topbar">
+
+                <div class="topbar-title">
+                    <h1>Account Settings</h1>
+                    <div class="breadcrumb">
+                        Wareloom / Account / My Profile
+                    </div>
+                </div>
+
+                <div class="topbar-user">
+
+                    <div class="topbar-avatar">
+
+                        {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="Profile picture">
+                        {% else %}
                         <i class="bi bi-person"></i>
-                    {% endif %}
+                        {% endif %}
+
+                    </div>
+
+                    <span>{{ user.username }}</span>
 
                 </div>
 
-                <span>{{ user.username }}</span>
+            </header>
 
-            </div>
+            <section class="content">
 
-        </header>
-
-        <!-- PROFILE PAGE -->
-        <section class="content">
-
-            <div class="page-intro">
-
-                <div>
-                    <p class="eyebrow">Account management</p>
-                    <h2>My Profile</h2>
-
-                    <p>
-                        Manage your personal information and profile picture.
-                    </p>
-                </div>
-
-            </div>
-
-            <!-- PROFILE CARD -->
-            <section class="profile-card">
-
-                <div class="card-heading">
+                <div class="page-intro">
 
                     <div>
-                        <h3>Personal Information</h3>
+                        <p class="eyebrow">Account management</p>
+                        <h2>My Profile</h2>
 
                         <p>
-                            Keep your account details up to date.
+                            Manage your personal information and profile picture.
                         </p>
                     </div>
 
-                    <span class="secure-label">
-                        <i class="bi bi-shield-check"></i>
-                        Account protected
-                    </span>
-
                 </div>
 
-                <!-- DJANGO MESSAGES -->
-                {% if messages %}
+                <section class="profile-card">
+
+                    <div class="card-heading">
+
+                        <div>
+                            <h3>Personal Information</h3>
+
+                            <p>
+                                Keep your account details up to date.
+                            </p>
+                        </div>
+
+                        <span class="secure-label">
+                            <i class="bi bi-shield-check"></i>
+                            Account protected
+                        </span>
+
+                    </div>
+
+                    <!-- DJANGO MESSAGES -->
+                    {% if messages %}
 
                     <ul class="messages" aria-live="polite">
 
                         {% for message in messages %}
 
-                            <li class="{% if message.tags == 'error' %}error{% endif %}">
-                                {{ message }}
-                            </li>
+                        <li class="{% if message.tags == 'error' %}error{% endif %}">
+                            {{ message }}
+                        </li>
 
                         {% endfor %}
 
                     </ul>
 
-                {% endif %}
+                    {% endif %}
 
-                <!-- PROFILE FORM -->
-                <form class="profile-form"
-                      method="POST"
-                      enctype="multipart/form-data">
+                    <form class="profile-form" method="POST" enctype="multipart/form-data">
 
-                    {% csrf_token %}
+                        {% csrf_token %}
 
-                    {% if form.non_field_errors %}
+                        {% if form.non_field_errors %}
                         <div class="field-error">
                             {{ form.non_field_errors }}
                         </div>
-                    {% endif %}
+                        {% endif %}
 
-                    <!-- PROFILE IMAGE -->
-                    <h4 class="section-label">
-                        <i class="bi bi-camera"></i>
-                        Profile photograph
-                    </h4>
+                        <h4 class="section-label">
+                            <i class="bi bi-camera"></i>
+                            Profile photograph
+                        </h4>
 
-                    <div class="photo-panel">
+                        <div class="photo-panel">
 
-                        <div class="avatar-wrap">
+                            <div class="avatar-wrap">
 
-                            {% if profile.profile_image %}
+                                {% if profile.profile_image %}
 
-                                <img src="{{ profile.profile_image.url }}"
-                                     class="avatar"
-                                     id="avatarPreview"
-                                     alt="Current profile picture">
+                                <img src="{{ profile.profile_image.url }}" class="avatar" id="avatarPreview"
+                                    alt="Current profile picture">
 
-                                <div class="avatar-placeholder"
-                                     id="avatarPlaceholder"
-                                     style="display:none;">
+                                <div class="avatar-placeholder" id="avatarPlaceholder" style="display:none;">
                                     <i class="bi bi-person"></i>
                                 </div>
 
-                            {% else %}
+                                {% else %}
 
-                                <div class="avatar-placeholder"
-                                     id="avatarPlaceholder">
+                                <div class="avatar-placeholder" id="avatarPlaceholder">
                                     <i class="bi bi-person"></i>
                                 </div>
 
-                                <img src=""
-                                     class="avatar"
-                                     id="avatarPreview"
-                                     alt="Selected profile picture"
-                                     style="display:none;">
+                                <img src="" class="avatar" id="avatarPreview" alt="Selected profile picture"
+                                    style="display:none;">
 
-                            {% endif %}
+                                {% endif %}
 
-                        </div>
+                            </div>
 
-                        <div class="photo-copy">
+                            <div class="photo-copy">
 
-                            <h4>
-                                {{ user.get_full_name|default:user.username }}
-                            </h4>
+                                <h4>
+                                    {{ user.get_full_name|default:user.username }}
+                                </h4>
 
-                            <p>
-                                Choose a clear image so your account is easy to identify.
-                            </p>
+                                <p>
+                                    Choose a clear image so your account is easy to identify.
+                                </p>
 
-                            <label for="id_profile_image"
-                                   class="upload-control">
+                                <label for="id_profile_image" class="upload-control">
 
-                                <i class="bi bi-cloud-arrow-up"></i>
-                                Choose image
+                                    <i class="bi bi-cloud-arrow-up"></i>
+                                    Choose image
 
-                            </label>
+                                </label>
 
-                            <input type="file"
-                                   name="profile_image"
-                                   accept=".jpg,.jpeg,.png,,image/jpeg,image/png,image"
-                                   id="id_profile_image"
-                                   class="file-input">
+                                <input type="file" name="profile_image"
+                                    accept=".jpg,.jpeg,.png,,image/jpeg,image/png,image" id="id_profile_image"
+                                    class="file-input">
 
-                            <span class="file-name" id="fileName">
-                                No file selected
-                            </span>
+                                <span class="file-name" id="fileName">
+                                    No file selected
+                                </span>
 
-                            <p class="help-text">
-                                JPG, JPEG or PNG · Maximum size 2 MB
-                            </p>
+                                <p class="help-text">
+                                    JPG, JPEG or PNG · Maximum size 2 MB
+                                </p>
 
-                            {% for error in form.profile_image.errors %}
+                                {% for error in form.profile_image.errors %}
 
                                 <p class="field-error">
                                     {{ error }}
                                 </p>
 
-                            {% endfor %}
+                                {% endfor %}
+
+                            </div>
 
                         </div>
 
-                    </div>
+                        <h4 class="section-label">
+                            <i class="bi bi-person-vcard"></i>
+                            Personal details
+                        </h4>
 
-                    <!-- PERSONAL DETAILS -->
-                    <h4 class="section-label">
-                        <i class="bi bi-person-vcard"></i>
-                        Personal details
-                    </h4>
+                        <div class="form-grid">
 
-                    <div class="form-grid">
+                            <div class="field">
+
+                                <label for="{{ form.first_name.id_for_label }}">
+                                    First name
+                                </label>
+
+                                {{ form.first_name }}
+
+                                {% for error in form.first_name.errors %}
+                                <p class="field-error">{{ error }}</p>
+                                {% endfor %}
+
+                            </div>
+
+                            <div class="field">
+
+                                <label for="{{ form.last_name.id_for_label }}">
+                                    Last name
+                                </label>
+
+                                {{ form.last_name }}
+
+                                {% for error in form.last_name.errors %}
+                                <p class="field-error">{{ error }}</p>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
 
                         <div class="field">
 
-                            <label for="{{ form.first_name.id_for_label }}">
-                                First name
+                            <label for="{{ form.email.id_for_label }}">
+                                Email address
                             </label>
 
-                            {{ form.first_name }}
+                            {{ form.email }}
 
-                            {% for error in form.first_name.errors %}
-                                <p class="field-error">{{ error }}</p>
-                            {% endfor %}
-
-                        </div>
-
-                        <div class="field">
-
-                            <label for="{{ form.last_name.id_for_label }}">
-                                Last name
-                            </label>
-
-                            {{ form.last_name }}
-
-                            {% for error in form.last_name.errors %}
-                                <p class="field-error">{{ error }}</p>
-                            {% endfor %}
-
-                        </div>
-
-                    </div>
-
-                    <div class="field">
-
-                        <label for="{{ form.email.id_for_label }}">
-                            Email address
-                        </label>
-
-                        {{ form.email }}
-
-                        {% for error in form.email.errors %}
+                            {% for error in form.email.errors %}
                             <p class="field-error">{{ error }}</p>
-                        {% endfor %}
+                            {% endfor %}
 
-                    </div>
+                        </div>
 
-                    <div class="field">
+                        <div class="field">
 
-                        <label for="username">
-                            Username
-                        </label>
+                            <label for="username">
+                                Username
+                            </label>
 
-                        <input type="text"
-                               id="username"
-                               value="{{ user.username }}"
-                               readonly>
+                            <input type="text" id="username" value="{{ user.username }}" readonly>
 
-                        <p class="help-text">
-                            Your username cannot be changed from this page.
-                        </p>
+                            <p class="help-text">
+                                Your username cannot be changed from this page.
+                            </p>
 
-                    </div>
+                        </div>
 
-                    <!-- FORM ACTIONS -->
-                    <div class="form-actions">
+                        <!-- FORM ACTIONS -->
+                        <div class="form-actions">
 
-                        <a href="{% url 'dashboard' %}"
-                           class="btn btn-secondary">
+                            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
 
-                            <i class="bi bi-arrow-left"></i>
-                            Back to dashboard
+                                <i class="bi bi-arrow-left"></i>
+                                Back to dashboard
 
-                        </a>
+                            </a>
 
-                        <button type="submit"
-                                class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary">
 
-                            <i class="bi bi-check2-circle"></i>
-                            Save changes
+                                <i class="bi bi-check2-circle"></i>
+                                Save changes
 
-                        </button>
+                            </button>
 
-                    </div>
+                        </div>
 
-                </form>
+                    </form>
+
+                </section>
+
+                <p class="footer-note">
+                    Wareloom · Smart Warehouse Management System
+                </p>
 
             </section>
 
-            <p class="footer-note">
-                Wareloom · Smart Warehouse Management System
-            </p>
+        </main>
 
-        </section>
+    </div>
 
-    </main>
+    <script>
 
-</div>
+        const imageInput = document.getElementById("id_profile_image");
+        const preview = document.getElementById("avatarPreview");
+        const placeholder = document.getElementById("avatarPlaceholder");
+        const fileName = document.getElementById("fileName");
 
-<!-- IMAGE PREVIEW AND CLIENT-SIDE VALIDATION -->
-<script>
+        if (imageInput) {
 
-    const imageInput = document.getElementById("id_profile_image");
-    const preview = document.getElementById("avatarPreview");
-    const placeholder = document.getElementById("avatarPlaceholder");
-    const fileName = document.getElementById("fileName");
+            imageInput.addEventListener("change", function () {
 
-    if (imageInput) {
+                const file = this.files && this.files[0];
 
-        imageInput.addEventListener("change", function () {
-
-            const file = this.files && this.files[0];
-
-            if (!file) {
-                fileName.textContent = "No file selected";
-                return;
-            }
-
-            const allowedTypes = [
-                "image/jpeg",
-                "image/png",
-                
-            ];
-
-            if (!allowedTypes.includes(file.type)) {
-
-                alert("Please choose a JPG, PNG image.");
-
-                this.value = "";
-                fileName.textContent = "No file selected";
-
-                return;
-            }
-
-            if (file.size > 2 * 1024 * 1024) {
-
-                alert("The image must not exceed 2 MB.");
-
-                this.value = "";
-                fileName.textContent = "No file selected";
-
-                return;
-            }
-
-            fileName.textContent = file.name;
-
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-
-                preview.src = event.target.result;
-                preview.style.display = "block";
-
-                if (placeholder) {
-                    placeholder.style.display = "none";
+                if (!file) {
+                    fileName.textContent = "No file selected";
+                    return;
                 }
 
-            };
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
 
-            reader.readAsDataURL(file);
+                ];
 
-        });
+                if (!allowedTypes.includes(file.type)) {
 
-    }
+                    alert("Please choose a JPG, PNG image.");
 
-</script>
+                    this.value = "";
+                    fileName.textContent = "No file selected";
+
+                    return;
+                }
+
+                if (file.size > 2 * 1024 * 1024) {
+
+                    alert("The image must not exceed 2 MB.");
+
+                    this.value = "";
+                    fileName.textContent = "No file selected";
+
+                    return;
+                }
+
+                fileName.textContent = file.name;
+
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+
+                    preview.src = event.target.result;
+                    preview.style.display = "block";
+
+                    if (placeholder) {
+                        placeholder.style.display = "none";
+                    }
+
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+        }
+
+    </script>
 
 </body>
+
 </html>

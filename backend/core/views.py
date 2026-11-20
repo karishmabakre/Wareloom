@@ -366,10 +366,9 @@ def product_crud(request):
             messages.error(request, "Invalid product action.")
             return redirect("products")
 
-    # ---------------- LIST PRODUCTS + PAGINATION ----------------
     product_list = products.objects.all().order_by("-id")
 
-    paginator = Paginator(product_list, 10)
+    paginator = Paginator(product_list, 10)  # Show 10 products per page
     page_obj = paginator.get_page(request.GET.get("page"))
 
     return render(
@@ -1799,3 +1798,122 @@ def profile_view(request):
             "user": request.user
         }
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#---------------------------------
+from django.contrib.auth.forms import (
+    PasswordResetForm,
+    SetPasswordForm,
+)
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import (
+    urlsafe_base64_encode,
+    urlsafe_base64_decode,
+)
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def password_reset_view(request):
+    stage = request.GET.get("stage", "email")
+
+    if request.method == "POST":
+        stage = request.POST.get("stage", "email")
+
+        if stage == "email":
+            form = PasswordResetForm(request.POST)
+
+            if form.is_valid():
+                form.save(
+                    request=request,
+                    use_https=request.is_secure(),
+                    email_template_name="password_reset.html",
+                    subject_template_name="password_reset.html",
+                    html_email_template_name="password_reset.html",
+                )
+
+                return redirect("/password-reset/?sent=1")
+
+        elif stage == "new_password":
+            uid = request.POST.get("uid")
+            token = request.POST.get("token")
+
+            try:
+                user_id = urlsafe_base64_decode(uid).decode()
+                user = User.objects.get(pk=user_id)
+
+                if default_token_generator.check_token(user, token):
+                    form = SetPasswordForm(user, request.POST)
+
+                    if form.is_valid():
+                        form.save()
+                        messages.success(
+                            request,
+                            "Your password has been changed successfully."
+                        )
+                        return redirect("login")
+
+                    return render(request, "password_reset.html", {
+                        "stage": "new_password",
+                        "form": form,
+                        "uid": uid,
+                        "token": token,
+                    })
+
+            except (ValueError, TypeError, User.DoesNotExist):
+                pass
+
+            return render(request, "password_reset.html", {
+                "stage": "invalid",
+            })
+
+    if request.GET.get("sent") == "1":
+        return render(request, "password_reset.html", {
+            "stage": "sent",
+        })
+
+    if stage == "new_password":
+        uid = request.GET.get("uid")
+        token = request.GET.get("token")
+
+        try:
+            user_id = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=user_id)
+
+            if default_token_generator.check_token(user, token):
+                form = SetPasswordForm(user)
+
+                return render(request, "password_reset.html", {
+                    "stage": "new_password",
+                    "form": form,
+                    "uid": uid,
+                    "token": token,
+                })
+        except (ValueError, TypeError, User.DoesNotExist):
+            pass
+
+        return render(request, "password_reset.html", {
+            "stage": "invalid",
+        })
+
+    form = PasswordResetForm()
+
+    return render(request, "password_reset.html", {
+        "stage": "email",
+        "form": form,
+    })

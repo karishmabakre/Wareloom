@@ -542,20 +542,17 @@
 
                                 <div class="form-group">
                                     <label for="order">Order *</label>
+
                                     <select id="order" name="order" required>
                                         <option value="">Select an order</option>
-                                        {% if edit_shipment %}
 
                                         {% for order in available_orders %}
-
-                                        <option value="{{ order.id }}">
+                                        <option value="{{ order.id }}" {% if edit_shipment and edit_shipment.order_id == order.id %} selected {% endif %}>
                                             {{ order.order_number }}
                                         </option>
-
                                         {% endfor %}
-
-                                        {% endif %}
                                     </select>
+
                                     {% if not available_orders %}
                                     <small class="muted">
                                         No unassigned orders available. Create an order first.
@@ -583,18 +580,11 @@
 
                                     <select id="status" name="status" required>
                                         {% for value, label in status_choices %}
-
-                                        {% if edit_shipment %}
-                                        <option value="{{ value }}" {% if edit_shipment.status==value %}selected{% endif
-                                            %}>
+                                        <option value="{{ value }}" {% if edit_shipment %} 
+                                        {% if edit_shipment.status == value %} selected {% endif %}
+                                             {% elif value == 'Preparing' %} selected {% endif %}>
                                             {{ label }}
                                         </option>
-                                        {% else %}
-                                        <option value="{{ value }}" {% if value=='Preparing' %}selected{% endif %}>
-                                            {{ label }}
-                                        </option>
-                                        {% endif %}
-
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -640,7 +630,7 @@
                                 <option value="">All Statuses</option>
 
                                 {% for value, label in status_choices %}
-                                <option value="{{ value }}" {% if status_filter==value %}selected{% endif %}>
+                                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>
                                     {{ label }}
                                 </option>
                                 {% endfor %}
